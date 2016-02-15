@@ -775,6 +775,32 @@ Invalid
 {message: "Ya has canjeado el beneficio"}
 ```
 
+### Incribirse al sortedo (Join)
+
+#### Request
+
+```js
+POST /benefits/555lkjksadfu132/join
+Host: tj.dev.konabackend.com
+Content-Type: application/json
+Cache-Control: no-cache
+```
+
+#### Response
+
+Valid
+
+```js
+204 OK
+```
+
+Invalid
+
+```js
+400 INVALID FORMAT
+{message: "Ya te has inscripto al sorteo"}
+```
+
 ## BENEFITS - DETAILS - RATING
 
 ![BENEFITS - DETAILS - RATING](http://s13.postimg.org/swx6pwwzr/Screen_Shot_2016_02_15_at_13_44_25.png)
