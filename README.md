@@ -64,7 +64,8 @@ GET /benefits
             _id:"56c130b14db7206a69164688"
          }
       ]
-   }
+   },
+   ...
 ]  
 ```
 
@@ -139,8 +140,67 @@ Invalid
 {"valido":false,"nombre":null,"apellido":null}
 ```
 
+## LOGIN WITH CI
+
+![Login](http://s23.postimg.org/4ugeolpkb/Screen_Shot_2016_02_15_at_12_14_00.png)
+
+#### Request
+
+```js
+POST /users/login
+Host: tj.dev.konabackend.com
+Content-Type: application/json
+Cache-Control: no-cache
+
+{ 
+    "email" : "santiago@konacloud.io", 
+    "password" : "clear300"
+}
+
+```
+
+#### Response
+
+```js
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2OTMzNDk1NGY3NTIxMjIzMWFkNDEiLCJlbWFpbCI6InNhbnRpYWdvQGtvbmFjbG91ZC5pbyIsIl9fdiI6MCwiYmlydGhQbGFjZSI6eyJuYW1lIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsImNvdW50cnlDb2RlIjoiVVkifSwicHJvZmlsZUltYWdlVXJsIjoiYnVja2V0LzU2NTY5NTlhZjY2MDE0N2UzNGQxYmE0ZSIsImJpcnRoZGF5IjoiMTk4OS0wNi0yMFQwMDowMDowMC4wMDBaIiwiY3VycmVudFBsYWNlIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsInN0YXR1cyI6IlZBQ0FUSU9OUyIsImZhdm91cml0ZVJlY29tbWVuZGVkIjpbXSwiZmF2b3VyaXRlRXZlbnRzIjpbXSwiaW50ZXJlc3RzIjpbIjU2NTY2ZWI5YmVlODgyMTgzYzE3NTA3MCIsIjU2NTY2ZThiYmVlODgyMTgzYzE3NTA2ZSIsIjU2NTY2ZTViYmVlODgyMTgzYzE3NTA2NiJdLCJjb3VudHJpZXNWaXNpdGVkIjpbIjU2NTY2MGUxYmU5NzQzYTk0OThlZGQ2MyJdLCJjb3VudHJpZXNUb1Zpc2l0IjpbIjU2NTY2MGI4YmU5NzQzYTk0OThlZGQ2MCJdLCJkZXNjcmlwdGlvbiI6WyJTb21lIGRlc2NyaXB0aW9uIGFib3V0IG1lIl0sImN1cnJlbnRQb3NpdGlvbiI6W10sInByb2ZpbGVQaG90b3MiOltdfQ.VhtO-POeXVlbVjUvAdPjLy5pstcU_D2LBf5GkplWyag",
+    "user": {
+        "_id": "56569334954f75212231ad41",
+        "email": "santiago@konacloud.io",
+        ...
+    }
+}
+```
+
+## FORGOT PASSWORD
+
+![FORGOT PASSWORD](http://s10.postimg.org/by72d0bnt/Screen_Shot_2016_02_15_at_12_17_13.png)
+
+#### Request
+
+```js
+POST /users/forgot-password HTTP/1.1
+Host: tj.dev.konabackend.com
+Content-Type: application/json
+Cache-Control: no-cache
+
+{ "email": "tin.isasa@gmail.com" }
+
+```
+
+#### Response
+
+```js
+204 OK
+```
+
+## REGISTER - YOUR PROFILE
+
+![REGISTER - YOUR PROFILE](http://s30.postimg.org/vuejeiw9d/Screen_Shot_2016_02_15_at_12_20_34.png)
+
 ### Upload profile Picture
 
+#### Request
 
 ```js
 POST /bucket HTTP/1.1
@@ -155,7 +215,7 @@ Content-Type: image/png
 ----WebKitFormBoundaryE19zNvXGzXaLvS5C
 ```
 
-  Response
+#### Response
 
 ```js
 {
@@ -165,7 +225,7 @@ Content-Type: image/png
 
 ### Get zones list
 
-  Request
+#### Request
 
 ```js
 GET /zones HTTP/1.1
@@ -173,7 +233,7 @@ Host: tj.dev.konabackend.com
 Cache-Control: no-cache
 ```
 
-  Response
+#### Response
 
 ```js
 [
@@ -190,13 +250,17 @@ Cache-Control: no-cache
 ...
 ```
 
-### Register 2nd page
+### Register
 
+```js
 Life stages
 
 -TEENAGER
 -LIVING_ALONE
 -STUDY_AND_WORK
+```
+
+#### Request
 
 ```js
 POST /users HTTP/1.1
@@ -220,6 +284,8 @@ Cache-Control: no-cache
 }
 ```
 
+#### Response
+
 ```js
 {
     "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfX3YiOjAsImVtYWlsIjoic2FudGlhZ29Aa29uYWNsb3VkLmlvIiwiX2lkIjoiNTY1NjkzMzQ5NTRmNzUyMTIyMzFhZDQxIiwiZmF2b3VyaXRlUmVjb21tZW5kZWQiOltdLCJmYXZvdXJpdGVFdmVudHMiOltdLCJpbnRlcmVzdHMiOltdLCJjb3VudHJpZXNWaXNpdGVkIjpbXSwiY291bnRyaWVzVG9WaXNpdCI6W10sImRlc2NyaXB0aW9uIjpbXSwiY3VycmVudFBvc2l0aW9uIjpbXSwicHJvZmlsZVBob3RvcyI6W119.wtknVCA1ykQ7q0261TZyahgUqZ15hbDwtExcuyh75vY",
@@ -231,32 +297,140 @@ Cache-Control: no-cache
 }
 ```
 
-### Login with email
+## FEATURED
+
+![FEATURED](http://s22.postimg.org/yyb8ed8n5/Screen_Shot_2016_02_15_at_12_23_17.png)
+
+#### Request
 
 ```js
-POST /users/login
+GET /featured
 Host: tj.dev.konabackend.com
 Content-Type: application/json
 Cache-Control: no-cache
-
-{ 
-    "email" : "santiago@konacloud.io", 
-    "password" : "clear300"
-}
-
 ```
 
-Response
+#### Response
+
+Se retornan descuentos, eventos y convocatorias
 
 ```js
-{
-    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2OTMzNDk1NGY3NTIxMjIzMWFkNDEiLCJlbWFpbCI6InNhbnRpYWdvQGtvbmFjbG91ZC5pbyIsIl9fdiI6MCwiYmlydGhQbGFjZSI6eyJuYW1lIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsImNvdW50cnlDb2RlIjoiVVkifSwicHJvZmlsZUltYWdlVXJsIjoiYnVja2V0LzU2NTY5NTlhZjY2MDE0N2UzNGQxYmE0ZSIsImJpcnRoZGF5IjoiMTk4OS0wNi0yMFQwMDowMDowMC4wMDBaIiwiY3VycmVudFBsYWNlIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsInN0YXR1cyI6IlZBQ0FUSU9OUyIsImZhdm91cml0ZVJlY29tbWVuZGVkIjpbXSwiZmF2b3VyaXRlRXZlbnRzIjpbXSwiaW50ZXJlc3RzIjpbIjU2NTY2ZWI5YmVlODgyMTgzYzE3NTA3MCIsIjU2NTY2ZThiYmVlODgyMTgzYzE3NTA2ZSIsIjU2NTY2ZTViYmVlODgyMTgzYzE3NTA2NiJdLCJjb3VudHJpZXNWaXNpdGVkIjpbIjU2NTY2MGUxYmU5NzQzYTk0OThlZGQ2MyJdLCJjb3VudHJpZXNUb1Zpc2l0IjpbIjU2NTY2MGI4YmU5NzQzYTk0OThlZGQ2MCJdLCJkZXNjcmlwdGlvbiI6WyJTb21lIGRlc2NyaXB0aW9uIGFib3V0IG1lIl0sImN1cnJlbnRQb3NpdGlvbiI6W10sInByb2ZpbGVQaG90b3MiOltdfQ.VhtO-POeXVlbVjUvAdPjLy5pstcU_D2LBf5GkplWyag",
-    "user": {
-        "_id": "56569334954f75212231ad41",
-        "email": "santiago@konacloud.io",
-        ...
-    }
-}
+[
+   {  
+      _id:"56c130b14db7206a69164687",
+      _createdAt:"2016-02-15T01:58:09.598Z",
+      _updatedAt:"2016-02-15T01:58:09.598Z",
+      picture:{  
+         url:"bucket/56c1300c4db7206a69164686",
+         width:400,
+         height:600
+      },
+      category:"56c10861bee81dbe3cf09534",
+      company:"56c11336cfe90f1f74f57595",
+      value:"15%",
+      title:"Todos los servicios",
+      description:"15% de descuento en todos los servicios (Alquiler de Vehículos - Autolavado - Gomería y Servicio Completo para autos y camionetas). En efectivo.",
+      date:"Todos los viernes",
+      expirationDate:"2016-03-14T00:00:00.000Z",
+      likes:0,
+      featured:true,
+      promotionType:"STANDARD",
+      type:"PRODUCT",
+      zone:"56c102b7bee81dbe3cf09527",
+      __v:0,
+      lifeStage:[  
+         "STUDY_AND_WORK"
+      ],
+      location:[  
+         -56.191665,
+         -34.912294
+      ],
+      accessibilities:[  
+         {  
+            name:"Rampa",
+            exists:false,
+            _id:"56c130b14db7206a6916468a"
+         },
+         {  
+            name:"Ascensor para ciegos",
+            exists:false,
+            _id:"56c130b14db7206a69164689"
+         },
+         {  
+            name:"Asesoramiento para sordos",
+            exists:false,
+            _id:"56c130b14db7206a69164688"
+         }
+      ]
+   },
+   ...
+]  
 ```
 
+## BENEFITS
 
+![BENEFITS](http://s11.postimg.org/4konebp0j/Screen_Shot_2016_02_15_at_12_34_06.png)
+
+#### Request
+
+```js
+GET /benefits?populate[]=category&populate[]=company&where[zone]=56c102b7bee81dbe3cf09527&where[title][$options]=i&where[title][$regex]="Texto"&where[category][$in]=56c10861bee81dbe3cf09536&where[category][$in]=56c10861bee81dbe3cf01232&where[type]=SERVICE&where[lifeStage][$in]=TEENAGER&where[lifeStage][$in]=LIVING_ALONE
+Host: tj.dev.konabackend.com
+Content-Type: application/json
+Cache-Control: no-cache
+```
+
+#### Response
+
+```js
+[
+   {  
+      _id:"56c130b14db7206a69164687",
+      _createdAt:"2016-02-15T01:58:09.598Z",
+      _updatedAt:"2016-02-15T01:58:09.598Z",
+      picture:{  
+         url:"bucket/56c1300c4db7206a69164686",
+         width:400,
+         height:600
+      },
+      category:"56c10861bee81dbe3cf09534",
+      company:"56c11336cfe90f1f74f57595",
+      value:"15%",
+      title:"Todos los servicios",
+      description:"15% de descuento en todos los servicios (Alquiler de Vehículos - Autolavado - Gomería y Servicio Completo para autos y camionetas). En efectivo.",
+      date:"Todos los viernes",
+      expirationDate:"2016-03-14T00:00:00.000Z",
+      likes:0,
+      featured:true,
+      promotionType:"STANDARD",
+      type:"PRODUCT",
+      zone:"56c102b7bee81dbe3cf09527",
+      __v:0,
+      lifeStage:[  
+         "STUDY_AND_WORK"
+      ],
+      location:[  
+         -56.191665,
+         -34.912294
+      ],
+      accessibilities:[  
+         {  
+            name:"Rampa",
+            exists:false,
+            _id:"56c130b14db7206a6916468a"
+         },
+         {  
+            name:"Ascensor para ciegos",
+            exists:false,
+            _id:"56c130b14db7206a69164689"
+         },
+         {  
+            name:"Asesoramiento para sordos",
+            exists:false,
+            _id:"56c130b14db7206a69164688"
+         }
+      ]
+   },
+   ...
+]  
+```
