@@ -100,20 +100,83 @@ Add qs offset limit
 GET benefits?populate[]=category&populate[]=company&offset=0&limit=10
 ```
 
-## SIGN IN PAGE 1
+## REGISTER
 
-### Register with email
+### Register validation
+
+```js
+POST /MIDES_REST HTTP/1.1
+User-Agent: Dalvik/2.1.0 (Linux; U; Android 5.1; Google Nexus 5 - 5.1.0 - API 22 - 1080x1920 Build/LMY47D)
+Host: test-wildfly.mides.gub.uy
+Connection: Keep-Alive
+Accept-Encoding: gzip
+Content-Type: application/json; charset=utf-8
+Authorization: Basic dGFyamV0YUpvdmVuOlRhcmpKMHYzbg==
+Content-Length: 72
+
+{
+  "cedulaDeIdentidad": "46932075",
+  "fechaDeNacimiento": "1989-08-17",
+  "telefonoContacto": "099123456"
+}
+```
+
+#### Valid
+
+```js
+{"valido":true,"nombre":"GONZALO ","apellido":"MELO VIERA"}
+```
+
+#### Invalid
+
+```js
+{"valido":false,"nombre":null,"apellido":null}
+```
+
+### Upload profile Picture
 
 
 ```js
+POST /bucket HTTP/1.1
+Host: tj.dev.konabackend.com
+Cache-Control: no-cache
+
+----WebKitFormBoundaryE19zNvXGzXaLvS5C
+Content-Disposition: form-data; name="file"; filename="Screen Shot 2015-11-22 at 01.26.22.png"
+Content-Type: image/png
+
+
+----WebKitFormBoundaryE19zNvXGzXaLvS5C
+```
+
+  Response
+
+```js
+{
+    "url": "bucket/565693f5a6f070c027a15bb3"
+}
+```
+
+### Register 2nd page
+
+```js
 POST /users HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Cache-Control: no-cache
 
 {  
-   "email":"santiago@konacloud.io",
-   "password":"****"
+  "firstName":"Santiago",
+  "lastName":"Cotto",
+  "ci": "46932075",
+  "birthday":"1989-06-20",
+  "phone": "091271974",
+  "email":"santiago@konacloud.io",
+  "password":"****",
+  "gender":"M",
+  "profilePictureUrl": "s3/56bfc9bae951a50468359d29",
+  "zone": "56bfc9c84b0c6fc1a7e2cc19",
+  "description": "I'm beautiful"
 }
 ```
 
@@ -123,54 +186,80 @@ Cache-Control: no-cache
     "user": {
         "__v": 0,
         "email": "santiago@konacloud.io",
-        "_id": "56569334954f75212231ad41"
+        ...
     }
 }
+
 ```
+### Get zones list
 
-
-### Register/Login with Facebook
-
-Request
+  Request
 
 ```js
-POST /users/login-with-facebook HTTP/1.1
-Host: flipflop.dev.konabackend.com
+GET /zones HTTP/1.1
+Host: tj.dev.konabackend.com
+Cache-Control: no-cache
+```
+
+  Response
+
+```js
+[
+    { 
+        "_id" : "56c102b5bee81dbe3cf0951e", 
+        "name" : "Artigas", 
+        "country" : "56c1030fbee81dbe3cf09532"
+    },
+    { 
+        "_id" : "56c102b5bee81dbe3cf0951f", 
+        "name" : "Canelones", 
+        "country" : "56c1030fbee81dbe3cf09532"
+    }
+...
+```
+
+### Update profile page 3
+
+Actual status posible values
+
+- LOCAL
+- AIMLESSLY
+- WORK_AND_TRAVEL
+- VACATIONS
+
+  Request
+
+```js
+PUT /users HTTP/1.1
+Host: tj.dev.konabackend.com
 Content-Type: application/json
-x-facebook-access-token: CAACEdEose0cBAJNKSGogM4TAHOABUwVUXqxTfnw10gWZBdXf8k7AXgZC76FIbP2XolVMWxVwmK3wMBMiPmEJcM0Rrct1d671ZCSkZCozbUNAGKsYwUb1cGAfovMAcet07zCy2Rvcwh264htCA9gBaSnEQ2j5fgC104EwngunrlH37Vwwhg9zEFuV95TkmAWI6qdZCYLJiuwQeE3X41k7z
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2OTMzNDk1NGY3NTIxMjIzMWFkNDEiLCJlbWFpbCI6InNhbnRpYWdvQGtvbmFjbG91ZC5pbyIsIl9fdiI6MCwiZmF2b3VyaXRlUmVjb21tZW5kZWQiOltdLCJmYXZvdXJpdGVFdmVudHMiOltdLCJpbnRlcmVzdHMiOltdLCJjb3VudHJpZXNWaXNpdGVkIjpbXSwiY291bnRyaWVzVG9WaXNpdCI6W10sImRlc2NyaXB0aW9uIjpbXSwiY3VycmVudFBvc2l0aW9uIjpbXSwicHJvZmlsZVBob3RvcyI6W119.yin9vWd6ieRdyAh5N67xYyFMxtHaHDtNznq_13aDY3g
 Cache-Control: no-cache
 
-{ }
-
-```
-
-Response
-
-```js
-{
-    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2YWYyZDQwNDQ3YThjNGRlZDE4NWMiLCJlbWFpbCI6IjE2MjEyMzQ2MjRAZmFjZWJvb2suY29tIiwiZmFjZWJvb2tJZCI6IjE2MjEyMzQ2MjQiLCJfX3YiOjAsImZhdm91cml0ZVJlY29tbWVuZGVkIjpbXSwiZmF2b3VyaXRlRXZlbnRzIjpbXSwiaW50ZXJlc3RzIjpbXSwiY291bnRyaWVzVmlzaXRlZCI6W10sImNvdW50cmllc1RvVmlzaXQiOltdLCJkZXNjcmlwdGlvbiI6W10sImN1cnJlbnRQb3NpdGlvbiI6W10sInByb2ZpbGVQaG90b3MiOltdfQ.DLOTq39xPY8ibEEjCMRSaEVcRJ3nI4xPBL9DxWE0ufo",
-    "user": {
-        "_id": "5656af2d40447a8c4ded185c",
-        "email": "1621234624@facebook.com",
-        "facebookId": "1621234624",
-        "__v": 0,
-        "favouriteRecommended": [],
-        "favouriteEvents": [],
-        "interests": [],
-        "countriesVisited": [],
-        "countriesToVisit": [],
-        "description": [],
-        "currentPosition": [],
-        "profilePhotos": []
-    }
+{  
+   "countriesToVisit":[  
+      "565660b8be9743a9498edd60"
+   ],
+   "countriesVisited":[  
+      "565660e1be9743a9498edd63"
+   ],
+   "interests":[  
+      "56566eb9bee882183c175070",
+      "56566e8bbee882183c17506e",
+      "56566e5bbee882183c175066"
+   ],
+   "status":"VACATIONS",
+   "description":"Some description about me",
+   "currentPlace":"Montevideo, Uruguay"
 }
 ```
+
 
 ### Login with email
 
 ```js
 POST /users/login
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Cache-Control: no-cache
 
@@ -220,338 +309,6 @@ Response
 }
 ```
 
-## SIGN IN PAGE 2
-
-![Simulator_Screen_Shot_Nov_26__2015__2.39.26_AM](http://git.teamkona.io/whatson/backend/uploads/444661028107404a4da72bc7ddb19b4b/Simulator_Screen_Shot_Nov_26__2015__2.39.26_AM.png)
-
-
-### Upload profile Picture
-
-
-```js
-POST /bucket HTTP/1.1
-Host: flipflop.dev.konabackend.com
-Cache-Control: no-cache
-
-----WebKitFormBoundaryE19zNvXGzXaLvS5C
-Content-Disposition: form-data; name="file"; filename="Screen Shot 2015-11-22 at 01.26.22.png"
-Content-Type: image/png
-
-
-----WebKitFormBoundaryE19zNvXGzXaLvS5C
-```
-
-  Response
-
-```js
-{
-    "url": "bucket/565693f5a6f070c027a15bb3"
-}
-```
-
-### Get places from google
-
-
-```
-GET /maps/api/place/textsearch/json?key=AIzaSyDJsKQ25-BKRG4EetV0SIrQep6DYA_dPR0&query=montevideo HTTP/1.1
-Host: maps.googleapis.com
-```
-
-
-
-```js
-{
-    "html_attributions": [],
-    "results": [
-        {
-            "formatted_address": "Montevideo, Uruguay",
-            "geometry": {
-                "location": {
-                    "lat": -34.9011127,
-                    "lng": -56.16453139999999
-                },
-                "viewport": {
-                    "northeast": {
-                        "lat": -34.70193,
-                        "lng": -56.0292436
-                    },
-                    "southwest": {
-                        "lat": -34.9379555,
-                        "lng": -56.4311685
-                    }
-                }
-            },
-            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/geocode-71.png",
-            "id": "13ce4603475f6e0d1516a69408ea50884eb69c7f",
-            "name": "Montevideo",
-            "place_id": "ChIJ0_c7xv-An5URmexbNS4bMms",
-            "reference": "CnRwAAAALC65_S3TV6IdY8p43RBzBm_03RB9ffwq0WUA5T2OSoEs1DahFnDaoRffRQLmaFEIJIqeabrovlrP2W7GqfqE3lPABK6YbYPhZPYCuMqOc6JXWBE0_Z250w_HsHRhUVo5v7nogyxHUOtns4ul-8-szRIQ370Igo7tipb1UkVj_uigcBoUIDHBsb9mjlnA5OQt7G4zfhABQoI",
-            "types": [
-                "locality",
-                "political"
-            ]
-        }
-    ],
-    "status": "OK"
-}
-```
-
-### Find country from place_id
-
-  Request
-
-```
-GET https://maps.googleapis.com/maps/api/place/details/json?key=AIzaSyDJsKQ25-BKRG4EetV0SIrQep6DYA_dPR0&placeid=ChIJ0_c7xv-An5URmexbNS4bMms
-```
-
-  Response
-```js
-{
-    "html_attributions": [],
-    "result": {
-        "address_components": [
-            {
-                "long_name": "Montevideo",
-                "short_name": "Montevideo",
-                "types": [
-                    "locality",
-                    "political"
-                ]
-            },
-            {
-                "long_name": "Departamento de Montevideo",
-                "short_name": "Departamento de Montevideo",
-                "types": [
-                    "administrative_area_level_1",
-                    "political"
-                ]
-            },
-            {
-                "long_name": "Uruguay",
-                "short_name": "UY",
-                "types": [
-                    "country",
-                    "political"
-                ]
-            }
-        ],
-        "adr_address": "<span class=\"locality\">Montevideo</span>, <span class=\"country-name\">Uruguay</span>",
-        "formatted_address": "Montevideo, Uruguay",
-        "geometry": {
-            "location": {
-                "lat": -34.9011127,
-                "lng": -56.16453139999999
-            },
-            "viewport": {
-                "northeast": {
-                    "lat": -34.70193,
-                    "lng": -56.0292436
-                },
-                "southwest": {
-                    "lat": -34.9379555,
-                    "lng": -56.4311685
-                }
-            }
-        },
-        "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/geocode-71.png",
-        "id": "13ce4603475f6e0d1516a69408ea50884eb69c7f",
-        "name": "Montevideo",
-        "place_id": "ChIJ0_c7xv-An5URmexbNS4bMms",
-        "reference": "CnRwAAAAHpfohqXkbdFdYZWOFJd__S_-uCTWYdKBuz63cCO_L59vuq10A9Y3txMfiJIOHvw1HcJZ62THvzYDz1FxD0lEf4h_KAl98Smn_8Yb1WKqkAgKqxaZHch--UE6o1adK-03z37LtxlVygIwTFCFxQEreBIQaMDGbcpwksl0FsGuw38xgRoUUROj-d6uFzz9Lxw5npVj036gUXs",
-        "scope": "GOOGLE",
-        "types": [
-            "locality",
-            "political"
-        ],
-        "url": "https://maps.google.com/?q=Montevideo,+Uruguay&ftid=0x959f80ffc63bf7d3:0x6b321b2e355bec99",
-        "vicinity": "Montevideo"
-    },
-    "status": "OK"
-}
-```
-
-
-### Show country from by country ID
-
-```js
-GET /flags/:countryId.png
-Host: flipflop.dev.konabackend.com
-```
-
-***countryId lowercase***
-
-Example
-
-```js
-GET /flags/uy.png
-Host: flipflop.dev.konabackend.com
-```
-
-### Update profile with photo,etc
-
-  Request
-
-```js
-PUT /users HTTP/1.1
-Host: flipflop.dev.konabackend.com
-Content-Type: application/json
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2OTMzNDk1NGY3NTIxMjIzMWFkNDEiLCJlbWFpbCI6InNhbnRpYWdvQGtvbmFjbG91ZC5pbyIsIl9fdiI6MCwiZmF2b3VyaXRlUmVjb21tZW5kZWQiOltdLCJmYXZvdXJpdGVFdmVudHMiOltdLCJpbnRlcmVzdHMiOltdLCJjb3VudHJpZXNWaXNpdGVkIjpbXSwiY291bnRyaWVzVG9WaXNpdCI6W10sImRlc2NyaXB0aW9uIjpbXSwiY3VycmVudFBvc2l0aW9uIjpbXSwicHJvZmlsZVBob3RvcyI6W119.yin9vWd6ieRdyAh5N67xYyFMxtHaHDtNznq_13aDY3g
-Cache-Control: no-cache
-
-{  
-   "profileImageUrl":"bucket/5656959af660147e34d1ba4e",
-   "birthPlace":{  
-      "name" : "Montevideo, Uruguay",
-      "countryCode":"UY"
-   },
-   "birthday":"1989-06-20",
-   "gender":"M"
-}
-```
-
-## SIGN IN PAGE 3
-
-![Simulator_Screen_Shot_Nov_26__2015__2.48.30_AM](http://git.teamkona.io/whatson/backend/uploads/f11f659bc59438c7f44400504d264ee4/Simulator_Screen_Shot_Nov_26__2015__2.48.30_AM.png)
-
-### Get interests
-
-  Request
-
-```js
-GET /interests HTTP/1.1
-Host: flipflop.dev.konabackend.com
-Cache-Control: no-cache
-```
-
-  Response
-
-```js
-[
-    {
-        "_id": "56566eb9bee882183c175070",
-        "name": "WALKS",
-        "color": "#094A38"
-    },
-    {
-        "_id": "56566e8bbee882183c17506e",
-        "name": "SPORT_TURISIM",
-        "color": "#67BDFA"
-    },
-
-...
-```
-
-### Get countries list
-
-  Request
-
-```js
-GET /countries HTTP/1.1
-Host: flipflop.dev.konabackend.com
-Cache-Control: no-cache
-```
-
-  Response
-
-```js
-[
-    {
-        "_id": "5656612f083a63804d6f18e5",
-        "flag": "bucket/56566129083a63804d6f18e3",
-        "name": "Venezuela",
-        "__v": 0
-    },
-...
-```
-
-### Update profile page 3
-
-Actual status posible values
-
-- LOCAL
-- AIMLESSLY
-- WORK_AND_TRAVEL
-- VACATIONS
-
-  Request
-
-```js
-PUT /users HTTP/1.1
-Host: flipflop.dev.konabackend.com
-Content-Type: application/json
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2OTMzNDk1NGY3NTIxMjIzMWFkNDEiLCJlbWFpbCI6InNhbnRpYWdvQGtvbmFjbG91ZC5pbyIsIl9fdiI6MCwiZmF2b3VyaXRlUmVjb21tZW5kZWQiOltdLCJmYXZvdXJpdGVFdmVudHMiOltdLCJpbnRlcmVzdHMiOltdLCJjb3VudHJpZXNWaXNpdGVkIjpbXSwiY291bnRyaWVzVG9WaXNpdCI6W10sImRlc2NyaXB0aW9uIjpbXSwiY3VycmVudFBvc2l0aW9uIjpbXSwicHJvZmlsZVBob3RvcyI6W119.yin9vWd6ieRdyAh5N67xYyFMxtHaHDtNznq_13aDY3g
-Cache-Control: no-cache
-
-{  
-   "countriesToVisit":[  
-      "565660b8be9743a9498edd60"
-   ],
-   "countriesVisited":[  
-      "565660e1be9743a9498edd63"
-   ],
-   "interests":[  
-      "56566eb9bee882183c175070",
-      "56566e8bbee882183c17506e",
-      "56566e5bbee882183c175066"
-   ],
-   "status":"VACATIONS",
-   "description":"Some description about me",
-   "currentPlace":"Montevideo, Uruguay"
-}
-```
-
-## Set current hostel
-
-
-### List hostels
-
-  Request
-
-```js
-GET /hostels HTTP/1.1
-Host: flipflop.dev.konabackend.com
-Content-Type: application/json
-Cache-Control: no-cache
-```
-
-  Response
-
-```js
-[
-    { 
-    "_id" : ObjectId("5656b549bee882183c175076"), 
-    "name" : "El viajero Hostels", 
-    "description" : "El Viajero Downtown Hostel & Suites is conveniently located in the heart of Montevideo: two blocks away from our most important Avenue 18 de Julio and just 10 minutes away from Montetvideo’s top places", 
-    "meetingPoint" : "Bar", 
-    "website" : "http://www.elviajerohostels.com/hostel-montevideo-down-town/", 
-    "email" : "contacto@elviajerohostels.com", 
-    "phone" : "099123456", 
-    "zone" : "5656b4f2bee882183c175074", 
-    "address" : "San jose y Rio negro", 
-    "picture" : "bucket/565a3dccbee882183c175078", 
-    "location" : [
-        -34.9071263, 
-        -56.1956573
-    ]
-  }
-]
-```
-
-### Set current hostel
-
-  Request
-
-```js
-PUT /users HTTP/1.1
-Host: flipflop.dev.konabackend.com
-Content-Type: application/json
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2OTMzNDk1NGY3NTIxMjIzMWFkNDEiLCJlbWFpbCI6InNhbnRpYWdvQGtvbmFjbG91ZC5pbyIsIl9fdiI6MCwiZmF2b3VyaXRlUmVjb21tZW5kZWQiOltdLCJmYXZvdXJpdGVFdmVudHMiOltdLCJpbnRlcmVzdHMiOltdLCJjb3VudHJpZXNWaXNpdGVkIjpbXSwiY291bnRyaWVzVG9WaXNpdCI6W10sImRlc2NyaXB0aW9uIjpbXSwiY3VycmVudFBvc2l0aW9uIjpbXSwicHJvZmlsZVBob3RvcyI6W119.yin9vWd6ieRdyAh5N67xYyFMxtHaHDtNznq_13aDY3g
-Cache-Control: no-cache
-
-{ 
-  "currentHostel" : "5656b549bee882183c175076"
-}
-```
 
 ### Set current position
 
@@ -559,7 +316,7 @@ Cache-Control: no-cache
 
 ```js
 PUT /users HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2OTMzNDk1NGY3NTIxMjIzMWFkNDEiLCJlbWFpbCI6InNhbnRpYWdvQGtvbmFjbG91ZC5pbyIsIl9fdiI6MCwiZmF2b3VyaXRlUmVjb21tZW5kZWQiOltdLCJmYXZvdXJpdGVFdmVudHMiOltdLCJpbnRlcmVzdHMiOltdLCJjb3VudHJpZXNWaXNpdGVkIjpbXSwiY291bnRyaWVzVG9WaXNpdCI6W10sImRlc2NyaXB0aW9uIjpbXSwiY3VycmVudFBvc2l0aW9uIjpbXSwicHJvZmlsZVBob3RvcyI6W119.yin9vWd6ieRdyAh5N67xYyFMxtHaHDtNznq_13aDY3g
 Cache-Control: no-cache
@@ -578,7 +335,7 @@ Cache-Control: no-cache
 
 ```js
 GET /home HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2OTMzNDk1NGY3NTIxMjIzMWFkNDEiLCJlbWFpbCI6InNhbnRpYWdvQGtvbmFjbG91ZC5pbyIsIl9fdiI6MCwiZmF2b3VyaXRlUmVjb21tZW5kZWQiOltdLCJmYXZvdXJpdGVFdmVudHMiOltdLCJpbnRlcmVzdHMiOltdLCJjb3VudHJpZXNWaXNpdGVkIjpbXSwiY291bnRyaWVzVG9WaXNpdCI6W10sImRlc2NyaXB0aW9uIjpbXSwiY3VycmVudFBvc2l0aW9uIjpbXSwicHJvZmlsZVBob3RvcyI6W119.yin9vWd6ieRdyAh5N67xYyFMxtHaHDtNznq_13aDY3g
 Cache-Control: no-cache
@@ -598,7 +355,7 @@ Respose
 
 ```js
 POST /users/forgot-password HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Cache-Control: no-cache
 
@@ -617,7 +374,7 @@ Cache-Control: no-cache
 
 ```js
 GET /benefits HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Cache-Control: no-cache
 ```
@@ -754,7 +511,7 @@ Cache-Control: no-cache
 
 ```js
 GET /benefits HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 ```
 
@@ -762,7 +519,7 @@ Content-Type: application/json
 
 ```js
 GET /benefits/:id HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 ```
 
@@ -774,7 +531,7 @@ Request
 
 ```js
 GET /events HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Cache-Control: no-cache
 ```
@@ -876,7 +633,7 @@ Cache-Control: no-cache
 
 ```js
 POST /events/565cfa67c2e649e9dbb29892/attend HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2OTMzNDk1NGY3NTIxMjIzMWFkNDEiLCJlbWFpbCI6InNhbnRpYWdvQGtvbmFjbG91ZC5pbyIsIl9fdiI6MCwiYmlydGhQbGFjZSI6eyJuYW1lIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsImNvdW50cnlDb2RlIjoiVVkifSwicHJvZmlsZUltYWdlVXJsIjoiYnVja2V0LzU2NTY5NTlhZjY2MDE0N2UzNGQxYmE0ZSIsImJpcnRoZGF5IjoiMTk4OS0wNi0yMFQwMDowMDowMC4wMDBaIiwiY3VycmVudFBsYWNlIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsInN0YXR1cyI6IlZBQ0FUSU9OUyIsImN1cnJlbnRIb3N0ZWwiOiI1NjU2YjU0OWJlZTg4MjE4M2MxNzUwNzYiLCJuYW1lIjoiU2FudGlhZ28gQ290dG8iLCJmYXZvdXJpdGVSZWNvbW1lbmRlZCI6W10sImZhdm91cml0ZUV2ZW50cyI6W10sImludGVyZXN0cyI6WyI1NjU2NmViOWJlZTg4MjE4M2MxNzUwNzAiLCI1NjU2NmU4YmJlZTg4MjE4M2MxNzUwNmUiLCI1NjU2NmU1YmJlZTg4MjE4M2MxNzUwNjYiXSwiY291bnRyaWVzVmlzaXRlZCI6WyI1NjU2NjBlMWJlOTc0M2E5NDk4ZWRkNjMiXSwiY291bnRyaWVzVG9WaXNpdCI6WyI1NjU2NjBiOGJlOTc0M2E5NDk4ZWRkNjAiXSwiZGVzY3JpcHRpb24iOlsiU29tZSBkZXNjcmlwdGlvbiBhYm91dCBtZSJdLCJjdXJyZW50UG9zaXRpb24iOltdLCJwcm9maWxlUGhvdG9zIjpbXX0.Z7oZw6VqhYeICzgNxOUQk01ZomRk8yw0C42891p73QI
 Cache-Control: no-cache
@@ -890,7 +647,7 @@ Cache-Control: no-cache
 
 ```js
 DELETE /events/565cfa67c2e649e9dbb29892/attend HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2OTMzNDk1NGY3NTIxMjIzMWFkNDEiLCJlbWFpbCI6InNhbnRpYWdvQGtvbmFjbG91ZC5pbyIsIl9fdiI6MCwiYmlydGhQbGFjZSI6eyJuYW1lIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsImNvdW50cnlDb2RlIjoiVVkifSwicHJvZmlsZUltYWdlVXJsIjoiYnVja2V0LzU2NTY5NTlhZjY2MDE0N2UzNGQxYmE0ZSIsImJpcnRoZGF5IjoiMTk4OS0wNi0yMFQwMDowMDowMC4wMDBaIiwiY3VycmVudFBsYWNlIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsInN0YXR1cyI6IlZBQ0FUSU9OUyIsImN1cnJlbnRIb3N0ZWwiOiI1NjU2YjU0OWJlZTg4MjE4M2MxNzUwNzYiLCJuYW1lIjoiU2FudGlhZ28gQ290dG8iLCJmYXZvdXJpdGVSZWNvbW1lbmRlZCI6W10sImZhdm91cml0ZUV2ZW50cyI6W10sImludGVyZXN0cyI6WyI1NjU2NmViOWJlZTg4MjE4M2MxNzUwNzAiLCI1NjU2NmU4YmJlZTg4MjE4M2MxNzUwNmUiLCI1NjU2NmU1YmJlZTg4MjE4M2MxNzUwNjYiXSwiY291bnRyaWVzVmlzaXRlZCI6WyI1NjU2NjBlMWJlOTc0M2E5NDk4ZWRkNjMiXSwiY291bnRyaWVzVG9WaXNpdCI6WyI1NjU2NjBiOGJlOTc0M2E5NDk4ZWRkNjAiXSwiZGVzY3JpcHRpb24iOlsiU29tZSBkZXNjcmlwdGlvbiBhYm91dCBtZSJdLCJjdXJyZW50UG9zaXRpb24iOltdLCJwcm9maWxlUGhvdG9zIjpbXX0.Z7oZw6VqhYeICzgNxOUQk01ZomRk8yw0C42891p73QI
 Cache-Control: no-cache
@@ -935,7 +692,7 @@ Response
 
 ```js
 POST /plans HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2OTMzNDk1NGY3NTIxMjIzMWFkNDEiLCJlbWFpbCI6InNhbnRpYWdvQGtvbmFjbG91ZC5pbyIsIl9fdiI6MCwiYmlydGhQbGFjZSI6eyJuYW1lIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsImNvdW50cnlDb2RlIjoiVVkifSwicHJvZmlsZUltYWdlVXJsIjoiYnVja2V0LzU2NTY5NTlhZjY2MDE0N2UzNGQxYmE0ZSIsImJpcnRoZGF5IjoiMTk4OS0wNi0yMFQwMDowMDowMC4wMDBaIiwiY3VycmVudFBsYWNlIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsInN0YXR1cyI6IlZBQ0FUSU9OUyIsImN1cnJlbnRIb3N0ZWwiOiI1NjU2YjU0OWJlZTg4MjE4M2MxNzUwNzYiLCJuYW1lIjoiU2FudGlhZ28gQ290dG8iLCJmYXZvdXJpdGVSZWNvbW1lbmRlZCI6W10sImZhdm91cml0ZUV2ZW50cyI6W10sImludGVyZXN0cyI6WyI1NjU2NmViOWJlZTg4MjE4M2MxNzUwNzAiLCI1NjU2NmU4YmJlZTg4MjE4M2MxNzUwNmUiLCI1NjU2NmU1YmJlZTg4MjE4M2MxNzUwNjYiXSwiY291bnRyaWVzVmlzaXRlZCI6WyI1NjU2NjBlMWJlOTc0M2E5NDk4ZWRkNjMiXSwiY291bnRyaWVzVG9WaXNpdCI6WyI1NjU2NjBiOGJlOTc0M2E5NDk4ZWRkNjAiXSwiZGVzY3JpcHRpb24iOlsiU29tZSBkZXNjcmlwdGlvbiBhYm91dCBtZSJdLCJjdXJyZW50UG9zaXRpb24iOltdLCJwcm9maWxlUGhvdG9zIjpbXX0.Z7oZw6VqhYeICzgNxOUQk01ZomRk8yw0C42891p73QI
 Cache-Control: no-cache
@@ -953,7 +710,7 @@ Cache-Control: no-cache
 
 ```js
 POST /plans HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2OTMzNDk1NGY3NTIxMjIzMWFkNDEiLCJlbWFpbCI6InNhbnRpYWdvQGtvbmFjbG91ZC5pbyIsIl9fdiI6MCwiYmlydGhQbGFjZSI6eyJuYW1lIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsImNvdW50cnlDb2RlIjoiVVkifSwicHJvZmlsZUltYWdlVXJsIjoiYnVja2V0LzU2NTY5NTlhZjY2MDE0N2UzNGQxYmE0ZSIsImJpcnRoZGF5IjoiMTk4OS0wNi0yMFQwMDowMDowMC4wMDBaIiwiY3VycmVudFBsYWNlIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsInN0YXR1cyI6IlZBQ0FUSU9OUyIsImN1cnJlbnRIb3N0ZWwiOiI1NjU2YjU0OWJlZTg4MjE4M2MxNzUwNzYiLCJuYW1lIjoiU2FudGlhZ28gQ290dG8iLCJmYXZvdXJpdGVSZWNvbW1lbmRlZCI6W10sImZhdm91cml0ZUV2ZW50cyI6W10sImludGVyZXN0cyI6WyI1NjU2NmViOWJlZTg4MjE4M2MxNzUwNzAiLCI1NjU2NmU4YmJlZTg4MjE4M2MxNzUwNmUiLCI1NjU2NmU1YmJlZTg4MjE4M2MxNzUwNjYiXSwiY291bnRyaWVzVmlzaXRlZCI6WyI1NjU2NjBlMWJlOTc0M2E5NDk4ZWRkNjMiXSwiY291bnRyaWVzVG9WaXNpdCI6WyI1NjU2NjBiOGJlOTc0M2E5NDk4ZWRkNjAiXSwiZGVzY3JpcHRpb24iOlsiU29tZSBkZXNjcmlwdGlvbiBhYm91dCBtZSJdLCJjdXJyZW50UG9zaXRpb24iOltdLCJwcm9maWxlUGhvdG9zIjpbXX0.Z7oZw6VqhYeICzgNxOUQk01ZomRk8yw0C42891p73QI
 Cache-Control: no-cache
@@ -969,7 +726,7 @@ Cache-Control: no-cache
 
 ```js
 GET /plans HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2OTMzNDk1NGY3NTIxMjIzMWFkNDEiLCJlbWFpbCI6InNhbnRpYWdvQGtvbmFjbG91ZC5pbyIsIl9fdiI6MCwiYmlydGhQbGFjZSI6eyJuYW1lIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsImNvdW50cnlDb2RlIjoiVVkifSwicHJvZmlsZUltYWdlVXJsIjoiYnVja2V0LzU2NTY5NTlhZjY2MDE0N2UzNGQxYmE0ZSIsImJpcnRoZGF5IjoiMTk4OS0wNi0yMFQwMDowMDowMC4wMDBaIiwiY3VycmVudFBsYWNlIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsInN0YXR1cyI6IlZBQ0FUSU9OUyIsImN1cnJlbnRIb3N0ZWwiOiI1NjU2YjU0OWJlZTg4MjE4M2MxNzUwNzYiLCJuYW1lIjoiU2FudGlhZ28gQ290dG8iLCJmYXZvdXJpdGVSZWNvbW1lbmRlZCI6W10sImZhdm91cml0ZUV2ZW50cyI6W10sImludGVyZXN0cyI6WyI1NjU2NmViOWJlZTg4MjE4M2MxNzUwNzAiLCI1NjU2NmU4YmJlZTg4MjE4M2MxNzUwNmUiLCI1NjU2NmU1YmJlZTg4MjE4M2MxNzUwNjYiXSwiY291bnRyaWVzVmlzaXRlZCI6WyI1NjU2NjBlMWJlOTc0M2E5NDk4ZWRkNjMiXSwiY291bnRyaWVzVG9WaXNpdCI6WyI1NjU2NjBiOGJlOTc0M2E5NDk4ZWRkNjAiXSwiZGVzY3JpcHRpb24iOlsiU29tZSBkZXNjcmlwdGlvbiBhYm91dCBtZSJdLCJjdXJyZW50UG9zaXRpb24iOltdLCJwcm9maWxlUGhvdG9zIjpbXX0.Z7oZw6VqhYeICzgNxOUQk01ZomRk8yw0C42891p73QI
 Cache-Control: no-cache
@@ -1006,7 +763,7 @@ Cache-Control: no-cache
 
 ```js
 GET /plans?populate[]=location&populate[]=event HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2OTMzNDk1NGY3NTIxMjIzMWFkNDEiLCJlbWFpbCI6InNhbnRpYWdvQGtvbmFjbG91ZC5pbyIsIl9fdiI6MCwiYmlydGhQbGFjZSI6eyJuYW1lIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsImNvdW50cnlDb2RlIjoiVVkifSwicHJvZmlsZUltYWdlVXJsIjoiYnVja2V0LzU2NTY5NTlhZjY2MDE0N2UzNGQxYmE0ZSIsImJpcnRoZGF5IjoiMTk4OS0wNi0yMFQwMDowMDowMC4wMDBaIiwiY3VycmVudFBsYWNlIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsInN0YXR1cyI6IlZBQ0FUSU9OUyIsImN1cnJlbnRIb3N0ZWwiOiI1NjU2YjU0OWJlZTg4MjE4M2MxNzUwNzYiLCJuYW1lIjoiU2FudGlhZ28gQ290dG8iLCJmYXZvdXJpdGVSZWNvbW1lbmRlZCI6W10sImZhdm91cml0ZUV2ZW50cyI6W10sImludGVyZXN0cyI6WyI1NjU2NmViOWJlZTg4MjE4M2MxNzUwNzAiLCI1NjU2NmU4YmJlZTg4MjE4M2MxNzUwNmUiLCI1NjU2NmU1YmJlZTg4MjE4M2MxNzUwNjYiXSwiY291bnRyaWVzVmlzaXRlZCI6WyI1NjU2NjBlMWJlOTc0M2E5NDk4ZWRkNjMiXSwiY291bnRyaWVzVG9WaXNpdCI6WyI1NjU2NjBiOGJlOTc0M2E5NDk4ZWRkNjAiXSwiZGVzY3JpcHRpb24iOlsiU29tZSBkZXNjcmlwdGlvbiBhYm91dCBtZSJdLCJjdXJyZW50UG9zaXRpb24iOltdLCJwcm9maWxlUGhvdG9zIjpbXX0.Z7oZw6VqhYeICzgNxOUQk01ZomRk8yw0C42891p73QI
 Cache-Control: no-cache
@@ -1154,7 +911,7 @@ Cache-Control: no-cache
 
 ```js
 DELETE /plans/5664e5c5f8f94c14075fc414/attend HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2OTMzNDk1NGY3NTIxMjIzMWFkNDEiLCJlbWFpbCI6InNhbnRpYWdvQGtvbmFjbG91ZC5pbyIsIl9fdiI6MCwiYmlydGhQbGFjZSI6eyJuYW1lIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsImNvdW50cnlDb2RlIjoiVVkifSwicHJvZmlsZUltYWdlVXJsIjoiYnVja2V0LzU2NTY5NTlhZjY2MDE0N2UzNGQxYmE0ZSIsImJpcnRoZGF5IjoiMTk4OS0wNi0yMFQwMDowMDowMC4wMDBaIiwiY3VycmVudFBsYWNlIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsInN0YXR1cyI6IlZBQ0FUSU9OUyIsImN1cnJlbnRIb3N0ZWwiOiI1NjU2YjU0OWJlZTg4MjE4M2MxNzUwNzYiLCJuYW1lIjoiU2FudGlhZ28gQ290dG8iLCJmYXZvdXJpdGVSZWNvbW1lbmRlZCI6W10sImZhdm91cml0ZUV2ZW50cyI6W10sImludGVyZXN0cyI6WyI1NjU2NmViOWJlZTg4MjE4M2MxNzUwNzAiLCI1NjU2NmU4YmJlZTg4MjE4M2MxNzUwNmUiLCI1NjU2NmU1YmJlZTg4MjE4M2MxNzUwNjYiXSwiY291bnRyaWVzVmlzaXRlZCI6WyI1NjU2NjBlMWJlOTc0M2E5NDk4ZWRkNjMiXSwiY291bnRyaWVzVG9WaXNpdCI6WyI1NjU2NjBiOGJlOTc0M2E5NDk4ZWRkNjAiXSwiZGVzY3JpcHRpb24iOlsiU29tZSBkZXNjcmlwdGlvbiBhYm91dCBtZSJdLCJjdXJyZW50UG9zaXRpb24iOltdLCJwcm9maWxlUGhvdG9zIjpbXX0.Z7oZw6VqhYeICzgNxOUQk01ZomRk8yw0C42891p73QI
 Cache-Control: no-cache
@@ -1166,7 +923,7 @@ Cache-Control: no-cache
 
 ```js
 GET /plans/5664e57cf8f94c14075fc413/people HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2OTMzNDk1NGY3NTIxMjIzMWFkNDEiLCJlbWFpbCI6InNhbnRpYWdvQGtvbmFjbG91ZC5pbyIsIl9fdiI6MCwiYmlydGhQbGFjZSI6eyJuYW1lIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsImNvdW50cnlDb2RlIjoiVVkifSwicHJvZmlsZUltYWdlVXJsIjoiYnVja2V0LzU2NTY5NTlhZjY2MDE0N2UzNGQxYmE0ZSIsImJpcnRoZGF5IjoiMTk4OS0wNi0yMFQwMDowMDowMC4wMDBaIiwiY3VycmVudFBsYWNlIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsInN0YXR1cyI6IlZBQ0FUSU9OUyIsImN1cnJlbnRIb3N0ZWwiOiI1NjU2YjU0OWJlZTg4MjE4M2MxNzUwNzYiLCJuYW1lIjoiU2FudGlhZ28gQ290dG8iLCJmYXZvdXJpdGVSZWNvbW1lbmRlZCI6W10sImZhdm91cml0ZUV2ZW50cyI6W10sImludGVyZXN0cyI6WyI1NjU2NmViOWJlZTg4MjE4M2MxNzUwNzAiLCI1NjU2NmU4YmJlZTg4MjE4M2MxNzUwNmUiLCI1NjU2NmU1YmJlZTg4MjE4M2MxNzUwNjYiXSwiY291bnRyaWVzVmlzaXRlZCI6WyI1NjU2NjBlMWJlOTc0M2E5NDk4ZWRkNjMiXSwiY291bnRyaWVzVG9WaXNpdCI6WyI1NjU2NjBiOGJlOTc0M2E5NDk4ZWRkNjAiXSwiZGVzY3JpcHRpb24iOlsiU29tZSBkZXNjcmlwdGlvbiBhYm91dCBtZSJdLCJjdXJyZW50UG9zaXRpb24iOltdLCJwcm9maWxlUGhvdG9zIjpbXX0.Z7oZw6VqhYeICzgNxOUQk01ZomRk8yw0C42891p73QI
 Cache-Control: no-cache
@@ -1203,7 +960,7 @@ IOS and android deviceId/registerId -> Push Notification
 
 ```js
 POST /devices HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NWYxZjAzYTY0OGFhN2JmMTIwYmI1ZTkiLCJlbWFpbCI6InN0cmluZyIsImF1dGhUeXBlIjoic3RyaW5nIiwibmFtZSI6InN0cmluZyIsIl9jcmVhdGVkX2F0Ijoic3RyaW5nIiwiX3VwZGF0ZWRfYXQiOiJzdHJpbmciLCJfX3YiOjAsImlhdCI6MTQ0NzMwNzEzNH0.LkmcyzhoL09uYec7_k9dQ_zvozbZ5pNHQJeKs_GctE4
 Cache-Control: no-cache
@@ -1225,7 +982,7 @@ deviceType values:
 
 ```js
 GET /users/current-hostel HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2OTMzNDk1NGY3NTIxMjIzMWFkNDEiLCJlbWFpbCI6InNhbnRpYWdvQGtvbmFjbG91ZC5pbyIsIl9fdiI6MCwiYmlydGhQbGFjZSI6eyJuYW1lIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsImNvdW50cnlDb2RlIjoiVVkifSwicHJvZmlsZUltYWdlVXJsIjoiYnVja2V0LzU2NTY5NTlhZjY2MDE0N2UzNGQxYmE0ZSIsImJpcnRoZGF5IjoiMTk4OS0wNi0yMFQwMDowMDowMC4wMDBaIiwiY3VycmVudFBsYWNlIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsInN0YXR1cyI6IlZBQ0FUSU9OUyIsImN1cnJlbnRIb3N0ZWwiOiI1NjU2YjU0OWJlZTg4MjE4M2MxNzUwNzYiLCJmYXZvdXJpdGVSZWNvbW1lbmRlZCI6W10sImZhdm91cml0ZUV2ZW50cyI6W10sImludGVyZXN0cyI6WyI1NjU2NmViOWJlZTg4MjE4M2MxNzUwNzAiLCI1NjU2NmU4YmJlZTg4MjE4M2MxNzUwNmUiLCI1NjU2NmU1YmJlZTg4MjE4M2MxNzUwNjYiXSwiY291bnRyaWVzVmlzaXRlZCI6WyI1NjU2NjBlMWJlOTc0M2E5NDk4ZWRkNjMiXSwiY291bnRyaWVzVG9WaXNpdCI6WyI1NjU2NjBiOGJlOTc0M2E5NDk4ZWRkNjAiXSwiZGVzY3JpcHRpb24iOlsiU29tZSBkZXNjcmlwdGlvbiBhYm91dCBtZSJdLCJjdXJyZW50UG9zaXRpb24iOltdLCJwcm9maWxlUGhvdG9zIjpbXX0.nYIm186irwB1x2nYC8OzPDOr6JflzOiYle4X2x3WXR0
 Cache-Control: no-cache
@@ -1253,7 +1010,7 @@ Cache-Control: no-cache
 
 ```js
 GET /users/nearby HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjcwZDdiNzY0MTE5MjBjMWIwNzRkNDAiLCJfY3JlYXRlZEF0IjoiMjAxNS0xMi0xNlQwMzoxNzoxMS41MzFaIiwiX3VwZGF0ZWRBdCI6IjIwMTUtMTItMTZUMDM6MTc6MTEuNTMxWiIsImVtYWlsIjoiaGVybmFuQHRlYW1rb25hLmlvIiwiX192IjowLCJuYW1lIjoiSGVybmFuIiwiYmlydGhQbGFjZSI6eyJuYW1lIjoiTW9udGV2aWRlbywgTW9udGV2aWRlbyBEZXBhcnRtZW50LCBVcnVndWF5IiwiY291bnRyeUNvZGUiOiJVWSJ9LCJiaXJ0aGRheSI6IjE5ODktMTItMTZUMDA6MDA6MDAuMDAwWiIsImhvd1RyYXZlbCI6IkFMT05FIiwicHJvZmlsZUltYWdlVXJsIjoiYnVja2V0LzU2NzFiYWE0ODIzMDM4MzEzMDU4YTlmNyIsImdlbmRlciI6Ik0iLCJjdXJyZW50UGxhY2UiOiJNb250ZXZpZGVvLCBNb250ZXZpZGVvIERlcGFydG1lbnQsIFVydWd1YXkiLCJjdXJyZW50SG9zdGVsIjoiNTY1NmI1NDliZWU4ODIxODNjMTc1MDc2IiwiZGVzY3JpcHRpb24iOiJIZXJuYW4iLCJzdGF0dXMiOiJWQUNBVElPTlMiLCJmcmllbmRzIjpbXSwiZmF2b3VyaXRlUmVjb21tZW5kZWQiOltdLCJmYXZvdXJpdGVFdmVudHMiOltdLCJpbnRlcmVzdHMiOlsiNTY1NjZlNWJiZWU4ODIxODNjMTc1MDY2IiwiNTY1NjZlMzBiZWU4ODIxODNjMTc1MDYwIiwiNTY1NjZlODJiZWU4ODIxODNjMTc1MDZjIl0sImNvdW50cmllc1Zpc2l0ZWQiOlsiNTY3MGNmZTczZWJjMGFhMDA1NzlmZmJlIiwiNTY3MGNmZTczZWJjMGFhMDA1NzlmZjJhIiwiNTY3MGNmZTczZWJjMGFhMDA1NzlmZmJmIl0sImNvdW50cmllc1RvVmlzaXQiOlsiNTY3MGNmZTczZWJjMGFhMDA1NzlmZWVlIl0sImN1cnJlbnRQb3NpdGlvbiI6WyIzNy4zMzIzMzEiLCItMTIyLjAzMTIxOSJdLCJwcm9maWxlUGhvdG9zIjpbXX0.zESQOefZliHpAD-a6pJPqIh-O_NtVMAkrgX2kLaIANQ
 Cache-Control: no-cache
@@ -1324,7 +1081,7 @@ Response
 
 ```
 GET /phrases HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 ```
 
   Response
@@ -1351,7 +1108,7 @@ Host: flipflop.dev.konabackend.com
 
 ```js
 POST /messages HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2OTMzNDk1NGY3NTIxMjIzMWFkNDEiLCJlbWFpbCI6InNhbnRpYWdvQGtvbmFjbG91ZC5pbyIsIl9fdiI6MCwiYmlydGhQbGFjZSI6eyJuYW1lIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsImNvdW50cnlDb2RlIjoiVVkifSwicHJvZmlsZUltYWdlVXJsIjoiYnVja2V0LzU2NTY5NTlhZjY2MDE0N2UzNGQxYmE0ZSIsImJpcnRoZGF5IjoiMTk4OS0wNi0yMFQwMDowMDowMC4wMDBaIiwiY3VycmVudFBsYWNlIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsInN0YXR1cyI6IlZBQ0FUSU9OUyIsImN1cnJlbnRIb3N0ZWwiOiI1NjU2YjU0OWJlZTg4MjE4M2MxNzUwNzYiLCJmYXZvdXJpdGVSZWNvbW1lbmRlZCI6W10sImZhdm91cml0ZUV2ZW50cyI6W10sImludGVyZXN0cyI6WyI1NjU2NmViOWJlZTg4MjE4M2MxNzUwNzAiLCI1NjU2NmU4YmJlZTg4MjE4M2MxNzUwNmUiLCI1NjU2NmU1YmJlZTg4MjE4M2MxNzUwNjYiXSwiY291bnRyaWVzVmlzaXRlZCI6WyI1NjU2NjBlMWJlOTc0M2E5NDk4ZWRkNjMiXSwiY291bnRyaWVzVG9WaXNpdCI6WyI1NjU2NjBiOGJlOTc0M2E5NDk4ZWRkNjAiXSwiZGVzY3JpcHRpb24iOlsiU29tZSBkZXNjcmlwdGlvbiBhYm91dCBtZSJdLCJjdXJyZW50UG9zaXRpb24iOltdLCJwcm9maWxlUGhvdG9zIjpbXX0.nYIm186irwB1x2nYC8OzPDOr6JflzOiYle4X2x3WXR0
 Cache-Control: no-cache
@@ -1366,7 +1123,7 @@ Cache-Control: no-cache
 
 ```js
 POST /messages HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2OTMzNDk1NGY3NTIxMjIzMWFkNDEiLCJlbWFpbCI6InNhbnRpYWdvQGtvbmFjbG91ZC5pbyIsIl9fdiI6MCwiYmlydGhQbGFjZSI6eyJuYW1lIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsImNvdW50cnlDb2RlIjoiVVkifSwicHJvZmlsZUltYWdlVXJsIjoiYnVja2V0LzU2NTY5NTlhZjY2MDE0N2UzNGQxYmE0ZSIsImJpcnRoZGF5IjoiMTk4OS0wNi0yMFQwMDowMDowMC4wMDBaIiwiY3VycmVudFBsYWNlIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsInN0YXR1cyI6IlZBQ0FUSU9OUyIsImN1cnJlbnRIb3N0ZWwiOiI1NjU2YjU0OWJlZTg4MjE4M2MxNzUwNzYiLCJmYXZvdXJpdGVSZWNvbW1lbmRlZCI6W10sImZhdm91cml0ZUV2ZW50cyI6W10sImludGVyZXN0cyI6WyI1NjU2NmViOWJlZTg4MjE4M2MxNzUwNzAiLCI1NjU2NmU4YmJlZTg4MjE4M2MxNzUwNmUiLCI1NjU2NmU1YmJlZTg4MjE4M2MxNzUwNjYiXSwiY291bnRyaWVzVmlzaXRlZCI6WyI1NjU2NjBlMWJlOTc0M2E5NDk4ZWRkNjMiXSwiY291bnRyaWVzVG9WaXNpdCI6WyI1NjU2NjBiOGJlOTc0M2E5NDk4ZWRkNjAiXSwiZGVzY3JpcHRpb24iOlsiU29tZSBkZXNjcmlwdGlvbiBhYm91dCBtZSJdLCJjdXJyZW50UG9zaXRpb24iOltdLCJwcm9maWxlUGhvdG9zIjpbXX0.nYIm186irwB1x2nYC8OzPDOr6JflzOiYle4X2x3WXR0
 Cache-Control: no-cache
@@ -1381,7 +1138,7 @@ Cache-Control: no-cache
 
 ```js
 POST /messages HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2OTMzNDk1NGY3NTIxMjIzMWFkNDEiLCJlbWFpbCI6InNhbnRpYWdvQGtvbmFjbG91ZC5pbyIsIl9fdiI6MCwiYmlydGhQbGFjZSI6eyJuYW1lIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsImNvdW50cnlDb2RlIjoiVVkifSwicHJvZmlsZUltYWdlVXJsIjoiYnVja2V0LzU2NTY5NTlhZjY2MDE0N2UzNGQxYmE0ZSIsImJpcnRoZGF5IjoiMTk4OS0wNi0yMFQwMDowMDowMC4wMDBaIiwiY3VycmVudFBsYWNlIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsInN0YXR1cyI6IlZBQ0FUSU9OUyIsImN1cnJlbnRIb3N0ZWwiOiI1NjU2YjU0OWJlZTg4MjE4M2MxNzUwNzYiLCJmYXZvdXJpdGVSZWNvbW1lbmRlZCI6W10sImZhdm91cml0ZUV2ZW50cyI6W10sImludGVyZXN0cyI6WyI1NjU2NmViOWJlZTg4MjE4M2MxNzUwNzAiLCI1NjU2NmU4YmJlZTg4MjE4M2MxNzUwNmUiLCI1NjU2NmU1YmJlZTg4MjE4M2MxNzUwNjYiXSwiY291bnRyaWVzVmlzaXRlZCI6WyI1NjU2NjBlMWJlOTc0M2E5NDk4ZWRkNjMiXSwiY291bnRyaWVzVG9WaXNpdCI6WyI1NjU2NjBiOGJlOTc0M2E5NDk4ZWRkNjAiXSwiZGVzY3JpcHRpb24iOlsiU29tZSBkZXNjcmlwdGlvbiBhYm91dCBtZSJdLCJjdXJyZW50UG9zaXRpb24iOltdLCJwcm9maWxlUGhvdG9zIjpbXX0.nYIm186irwB1x2nYC8OzPDOr6JflzOiYle4X2x3WXR0
 Cache-Control: no-cache
@@ -1400,7 +1157,7 @@ Cache-Control: no-cache
 
 ```js
 POST /messages HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2OTMzNDk1NGY3NTIxMjIzMWFkNDEiLCJlbWFpbCI6InNhbnRpYWdvQGtvbmFjbG91ZC5pbyIsIl9fdiI6MCwiYmlydGhQbGFjZSI6eyJuYW1lIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsImNvdW50cnlDb2RlIjoiVVkifSwicHJvZmlsZUltYWdlVXJsIjoiYnVja2V0LzU2NTY5NTlhZjY2MDE0N2UzNGQxYmE0ZSIsImJpcnRoZGF5IjoiMTk4OS0wNi0yMFQwMDowMDowMC4wMDBaIiwiY3VycmVudFBsYWNlIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsInN0YXR1cyI6IlZBQ0FUSU9OUyIsImN1cnJlbnRIb3N0ZWwiOiI1NjU2YjU0OWJlZTg4MjE4M2MxNzUwNzYiLCJmYXZvdXJpdGVSZWNvbW1lbmRlZCI6W10sImZhdm91cml0ZUV2ZW50cyI6W10sImludGVyZXN0cyI6WyI1NjU2NmViOWJlZTg4MjE4M2MxNzUwNzAiLCI1NjU2NmU4YmJlZTg4MjE4M2MxNzUwNmUiLCI1NjU2NmU1YmJlZTg4MjE4M2MxNzUwNjYiXSwiY291bnRyaWVzVmlzaXRlZCI6WyI1NjU2NjBlMWJlOTc0M2E5NDk4ZWRkNjMiXSwiY291bnRyaWVzVG9WaXNpdCI6WyI1NjU2NjBiOGJlOTc0M2E5NDk4ZWRkNjAiXSwiZGVzY3JpcHRpb24iOlsiU29tZSBkZXNjcmlwdGlvbiBhYm91dCBtZSJdLCJjdXJyZW50UG9zaXRpb24iOltdLCJwcm9maWxlUGhvdG9zIjpbXX0.nYIm186irwB1x2nYC8OzPDOr6JflzOiYle4X2x3WXR0
 Cache-Control: no-cache
@@ -1432,7 +1189,7 @@ Cache-Control: no-cache
 
 ```js
 GET /conversations HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2OTMzNDk1NGY3NTIxMjIzMWFkNDEiLCJlbWFpbCI6InNhbnRpYWdvQGtvbmFjbG91ZC5pbyIsIl9fdiI6MCwiYmlydGhQbGFjZSI6eyJuYW1lIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsImNvdW50cnlDb2RlIjoiVVkifSwicHJvZmlsZUltYWdlVXJsIjoiYnVja2V0LzU2NTY5NTlhZjY2MDE0N2UzNGQxYmE0ZSIsImJpcnRoZGF5IjoiMTk4OS0wNi0yMFQwMDowMDowMC4wMDBaIiwiY3VycmVudFBsYWNlIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsInN0YXR1cyI6IlZBQ0FUSU9OUyIsImN1cnJlbnRIb3N0ZWwiOiI1NjU2YjU0OWJlZTg4MjE4M2MxNzUwNzYiLCJmYXZvdXJpdGVSZWNvbW1lbmRlZCI6W10sImZhdm91cml0ZUV2ZW50cyI6W10sImludGVyZXN0cyI6WyI1NjU2NmViOWJlZTg4MjE4M2MxNzUwNzAiLCI1NjU2NmU4YmJlZTg4MjE4M2MxNzUwNmUiLCI1NjU2NmU1YmJlZTg4MjE4M2MxNzUwNjYiXSwiY291bnRyaWVzVmlzaXRlZCI6WyI1NjU2NjBlMWJlOTc0M2E5NDk4ZWRkNjMiXSwiY291bnRyaWVzVG9WaXNpdCI6WyI1NjU2NjBiOGJlOTc0M2E5NDk4ZWRkNjAiXSwiZGVzY3JpcHRpb24iOlsiU29tZSBkZXNjcmlwdGlvbiBhYm91dCBtZSJdLCJjdXJyZW50UG9zaXRpb24iOltdLCJwcm9maWxlUGhvdG9zIjpbXX0.nYIm186irwB1x2nYC8OzPDOr6JflzOiYle4X2x3WXR0
 Cache-Control: no-cache
@@ -1476,7 +1233,7 @@ Cache-Control: no-cache
 
 ```js
 GET /conversations/5660cc1631cee6f980b97f36 HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2OTMzNDk1NGY3NTIxMjIzMWFkNDEiLCJlbWFpbCI6InNhbnRpYWdvQGtvbmFjbG91ZC5pbyIsIl9fdiI6MCwiYmlydGhQbGFjZSI6eyJuYW1lIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsImNvdW50cnlDb2RlIjoiVVkifSwicHJvZmlsZUltYWdlVXJsIjoiYnVja2V0LzU2NTY5NTlhZjY2MDE0N2UzNGQxYmE0ZSIsImJpcnRoZGF5IjoiMTk4OS0wNi0yMFQwMDowMDowMC4wMDBaIiwiY3VycmVudFBsYWNlIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsInN0YXR1cyI6IlZBQ0FUSU9OUyIsImN1cnJlbnRIb3N0ZWwiOiI1NjU2YjU0OWJlZTg4MjE4M2MxNzUwNzYiLCJmYXZvdXJpdGVSZWNvbW1lbmRlZCI6W10sImZhdm91cml0ZUV2ZW50cyI6W10sImludGVyZXN0cyI6WyI1NjU2NmViOWJlZTg4MjE4M2MxNzUwNzAiLCI1NjU2NmU4YmJlZTg4MjE4M2MxNzUwNmUiLCI1NjU2NmU1YmJlZTg4MjE4M2MxNzUwNjYiXSwiY291bnRyaWVzVmlzaXRlZCI6WyI1NjU2NjBlMWJlOTc0M2E5NDk4ZWRkNjMiXSwiY291bnRyaWVzVG9WaXNpdCI6WyI1NjU2NjBiOGJlOTc0M2E5NDk4ZWRkNjAiXSwiZGVzY3JpcHRpb24iOlsiU29tZSBkZXNjcmlwdGlvbiBhYm91dCBtZSJdLCJjdXJyZW50UG9zaXRpb24iOltdLCJwcm9maWxlUGhvdG9zIjpbXX0.nYIm186irwB1x2nYC8OzPDOr6JflzOiYle4X2x3WXR0
 Cache-Control: no-cache
@@ -1520,7 +1277,7 @@ Cache-Control: no-cache
 
 ```js
 GET /conversations/find-one?where[user]=565f1a7af386ddd84bf764aa&limit=10&offset=0 HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2OTMzNDk1NGY3NTIxMjIzMWFkNDEiLCJlbWFpbCI6InNhbnRpYWdvQGtvbmFjbG91ZC5pbyIsIl9fdiI6MCwiYmlydGhQbGFjZSI6eyJuYW1lIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsImNvdW50cnlDb2RlIjoiVVkifSwicHJvZmlsZUltYWdlVXJsIjoiYnVja2V0LzU2NTY5NTlhZjY2MDE0N2UzNGQxYmE0ZSIsImJpcnRoZGF5IjoiMTk4OS0wNi0yMFQwMDowMDowMC4wMDBaIiwiY3VycmVudFBsYWNlIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsInN0YXR1cyI6IlZBQ0FUSU9OUyIsImN1cnJlbnRIb3N0ZWwiOiI1NjU2YjU0OWJlZTg4MjE4M2MxNzUwNzYiLCJuYW1lIjoiU2FudGlhZ28gQ290dG8iLCJmYXZvdXJpdGVSZWNvbW1lbmRlZCI6W10sImZhdm91cml0ZUV2ZW50cyI6W10sImludGVyZXN0cyI6WyI1NjU2NmViOWJlZTg4MjE4M2MxNzUwNzAiLCI1NjU2NmU4YmJlZTg4MjE4M2MxNzUwNmUiLCI1NjU2NmU1YmJlZTg4MjE4M2MxNzUwNjYiXSwiY291bnRyaWVzVmlzaXRlZCI6WyI1NjU2NjBlMWJlOTc0M2E5NDk4ZWRkNjMiXSwiY291bnRyaWVzVG9WaXNpdCI6WyI1NjU2NjBiOGJlOTc0M2E5NDk4ZWRkNjAiXSwiZGVzY3JpcHRpb24iOlsiU29tZSBkZXNjcmlwdGlvbiBhYm91dCBtZSJdLCJjdXJyZW50UG9zaXRpb24iOltdLCJwcm9maWxlUGhvdG9zIjpbXX0.Z7oZw6VqhYeICzgNxOUQk01ZomRk8yw0C42891p73QI
 Cache-Control: no-cache
@@ -1567,7 +1324,7 @@ Cache-Control: no-cache
 
 ```js
 POST /users/friends HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2OTMzNDk1NGY3NTIxMjIzMWFkNDEiLCJlbWFpbCI6InNhbnRpYWdvQGtvbmFjbG91ZC5pbyIsIl9fdiI6MCwiYmlydGhQbGFjZSI6eyJuYW1lIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsImNvdW50cnlDb2RlIjoiVVkifSwicHJvZmlsZUltYWdlVXJsIjoiYnVja2V0LzU2NTY5NTlhZjY2MDE0N2UzNGQxYmE0ZSIsImJpcnRoZGF5IjoiMTk4OS0wNi0yMFQwMDowMDowMC4wMDBaIiwiY3VycmVudFBsYWNlIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsInN0YXR1cyI6IlZBQ0FUSU9OUyIsImN1cnJlbnRIb3N0ZWwiOiI1NjU2YjU0OWJlZTg4MjE4M2MxNzUwNzYiLCJuYW1lIjoiU2FudGlhZ28gQ290dG8iLCJmYXZvdXJpdGVSZWNvbW1lbmRlZCI6W10sImZhdm91cml0ZUV2ZW50cyI6W10sImludGVyZXN0cyI6WyI1NjU2NmViOWJlZTg4MjE4M2MxNzUwNzAiLCI1NjU2NmU4YmJlZTg4MjE4M2MxNzUwNmUiLCI1NjU2NmU1YmJlZTg4MjE4M2MxNzUwNjYiXSwiY291bnRyaWVzVmlzaXRlZCI6WyI1NjU2NjBlMWJlOTc0M2E5NDk4ZWRkNjMiXSwiY291bnRyaWVzVG9WaXNpdCI6WyI1NjU2NjBiOGJlOTc0M2E5NDk4ZWRkNjAiXSwiZGVzY3JpcHRpb24iOlsiU29tZSBkZXNjcmlwdGlvbiBhYm91dCBtZSJdLCJjdXJyZW50UG9zaXRpb24iOltdLCJwcm9maWxlUGhvdG9zIjpbXX0.Z7oZw6VqhYeICzgNxOUQk01ZomRk8yw0C42891p73QI
 Cache-Control: no-cache
@@ -1580,7 +1337,7 @@ Cache-Control: no-cache
 
 ```js
 GET /users/friends HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2OTMzNDk1NGY3NTIxMjIzMWFkNDEiLCJlbWFpbCI6InNhbnRpYWdvQGtvbmFjbG91ZC5pbyIsIl9fdiI6MCwiYmlydGhQbGFjZSI6eyJuYW1lIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsImNvdW50cnlDb2RlIjoiVVkifSwicHJvZmlsZUltYWdlVXJsIjoiYnVja2V0LzU2NTY5NTlhZjY2MDE0N2UzNGQxYmE0ZSIsImJpcnRoZGF5IjoiMTk4OS0wNi0yMFQwMDowMDowMC4wMDBaIiwiY3VycmVudFBsYWNlIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsInN0YXR1cyI6IlZBQ0FUSU9OUyIsImN1cnJlbnRIb3N0ZWwiOiI1NjU2YjU0OWJlZTg4MjE4M2MxNzUwNzYiLCJuYW1lIjoiU2FudGlhZ28gQ290dG8iLCJmYXZvdXJpdGVSZWNvbW1lbmRlZCI6W10sImZhdm91cml0ZUV2ZW50cyI6W10sImludGVyZXN0cyI6WyI1NjU2NmViOWJlZTg4MjE4M2MxNzUwNzAiLCI1NjU2NmU4YmJlZTg4MjE4M2MxNzUwNmUiLCI1NjU2NmU1YmJlZTg4MjE4M2MxNzUwNjYiXSwiY291bnRyaWVzVmlzaXRlZCI6WyI1NjU2NjBlMWJlOTc0M2E5NDk4ZWRkNjMiXSwiY291bnRyaWVzVG9WaXNpdCI6WyI1NjU2NjBiOGJlOTc0M2E5NDk4ZWRkNjAiXSwiZGVzY3JpcHRpb24iOlsiU29tZSBkZXNjcmlwdGlvbiBhYm91dCBtZSJdLCJjdXJyZW50UG9zaXRpb24iOltdLCJwcm9maWxlUGhvdG9zIjpbXX0.Z7oZw6VqhYeICzgNxOUQk01ZomRk8yw0C42891p73QI
 Cache-Control: no-cache
@@ -1590,7 +1347,7 @@ Cache-Control: no-cache
 
 ```js
 DELETE /users/friends/56676c43ab5e87916f0dc9f4 HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NjU2OTMzNDk1NGY3NTIxMjIzMWFkNDEiLCJlbWFpbCI6InNhbnRpYWdvQGtvbmFjbG91ZC5pbyIsIl9fdiI6MCwiYmlydGhQbGFjZSI6eyJuYW1lIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsImNvdW50cnlDb2RlIjoiVVkifSwicHJvZmlsZUltYWdlVXJsIjoiYnVja2V0LzU2NTY5NTlhZjY2MDE0N2UzNGQxYmE0ZSIsImJpcnRoZGF5IjoiMTk4OS0wNi0yMFQwMDowMDowMC4wMDBaIiwiY3VycmVudFBsYWNlIjoiTW9udGV2aWRlbywgVXJ1Z3VheSIsInN0YXR1cyI6IlZBQ0FUSU9OUyIsImN1cnJlbnRIb3N0ZWwiOiI1NjU2YjU0OWJlZTg4MjE4M2MxNzUwNzYiLCJuYW1lIjoiU2FudGlhZ28gQ290dG8iLCJmYXZvdXJpdGVSZWNvbW1lbmRlZCI6W10sImZhdm91cml0ZUV2ZW50cyI6W10sImludGVyZXN0cyI6WyI1NjU2NmViOWJlZTg4MjE4M2MxNzUwNzAiLCI1NjU2NmU4YmJlZTg4MjE4M2MxNzUwNmUiLCI1NjU2NmU1YmJlZTg4MjE4M2MxNzUwNjYiXSwiY291bnRyaWVzVmlzaXRlZCI6WyI1NjU2NjBlMWJlOTc0M2E5NDk4ZWRkNjMiXSwiY291bnRyaWVzVG9WaXNpdCI6WyI1NjU2NjBiOGJlOTc0M2E5NDk4ZWRkNjAiXSwiZGVzY3JpcHRpb24iOlsiU29tZSBkZXNjcmlwdGlvbiBhYm91dCBtZSJdLCJjdXJyZW50UG9zaXRpb24iOltdLCJwcm9maWxlUGhvdG9zIjpbXX0.Z7oZw6VqhYeICzgNxOUQk01ZomRk8yw0C42891p73QI
 Cache-Control: no-cache
@@ -1605,7 +1362,7 @@ find places with name like  **monte**
 
 ```js
 GET /cities?where[name][$options]=i&limit=20&where[name][$regex]=monte
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 ```
 
@@ -1635,7 +1392,7 @@ Response
 
 ```js
 POST /destinations HTTP/1.1
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfX3YiOjAsIl9jcmVhdGVkQXQiOiIyMDE1LTEyLTE3VDAxOjU0OjI1LjU3N1oiLCJfdXBkYXRlZEF0IjoiMjAxNS0xMi0xN1QwMTo1NDoyNS41NzdaIiwiZW1haWwiOiJzYW50aWFnb0Brb25hY2xvdWQuaW8iLCJfaWQiOiI1NjcyMTVkMTJiODdiNmMwMGNkYmUyMTQiLCJmcmllbmRzIjpbXSwiZmF2b3VyaXRlUmVjb21tZW5kZWQiOltdLCJmYXZvdXJpdGVFdmVudHMiOltdLCJpbnRlcmVzdHMiOltdLCJjb3VudHJpZXNWaXNpdGVkIjpbXSwiY291bnRyaWVzVG9WaXNpdCI6W10sImN1cnJlbnRQb3NpdGlvbiI6W10sInByb2ZpbGVQaG90b3MiOltdfQ.ekj9KAbJIaJ2zzQH01qhLUgko-FuhgYniZyhSZbgQ8k
 Cache-Control: no-cache
@@ -1651,7 +1408,7 @@ Cache-Control: no-cache
 
 ```js
 GET /destinations/countries
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfX3YiOjAsIl9jcmVhdGVkQXQiOiIyMDE1LTEyLTE3VDAxOjU0OjI1LjU3N1oiLCJfdXBkYXRlZEF0IjoiMjAxNS0xMi0xN1QwMTo1NDoyNS41NzdaIiwiZW1haWwiOiJzYW50aWFnb0Brb25hY2xvdWQuaW8iLCJfaWQiOiI1NjcyMTVkMTJiODdiNmMwMGNkYmUyMTQiLCJmcmllbmRzIjpbXSwiZmF2b3VyaXRlUmVjb21tZW5kZWQiOltdLCJmYXZvdXJpdGVFdmVudHMiOltdLCJpbnRlcmVzdHMiOltdLCJjb3VudHJpZXNWaXNpdGVkIjpbXSwiY291bnRyaWVzVG9WaXNpdCI6W10sImN1cnJlbnRQb3NpdGlvbiI6W10sInByb2ZpbGVQaG90b3MiOltdfQ.ekj9KAbJIaJ2zzQH01qhLUgko-FuhgYniZyhSZbgQ8k
 Cache-Control: no-cache
@@ -1676,7 +1433,7 @@ Response
 
 ```js
 GET /destinations?where[country]=5670cfe73ebc0aa00579ffbf
-Host: flipflop.dev.konabackend.com
+Host: tj.dev.konabackend.com
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfX3YiOjAsIl9jcmVhdGVkQXQiOiIyMDE1LTEyLTE3VDAxOjU0OjI1LjU3N1oiLCJfdXBkYXRlZEF0IjoiMjAxNS0xMi0xN1QwMTo1NDoyNS41NzdaIiwiZW1haWwiOiJzYW50aWFnb0Brb25hY2xvdWQuaW8iLCJfaWQiOiI1NjcyMTVkMTJiODdiNmMwMGNkYmUyMTQiLCJmcmllbmRzIjpbXSwiZmF2b3VyaXRlUmVjb21tZW5kZWQiOltdLCJmYXZvdXJpdGVFdmVudHMiOltdLCJpbnRlcmVzdHMiOltdLCJjb3VudHJpZXNWaXNpdGVkIjpbXSwiY291bnRyaWVzVG9WaXNpdCI6W10sImN1cnJlbnRQb3NpdGlvbiI6W10sInByb2ZpbGVQaG90b3MiOltdfQ.ekj9KAbJIaJ2zzQH01qhLUgko-FuhgYniZyhSZbgQ8k
 Cache-Control: no-cache
