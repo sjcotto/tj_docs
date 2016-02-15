@@ -807,13 +807,177 @@ Invalid
 
 ## EVENTS
 
-![EVENTS](http://s28.postimg.org/scx6llkgd/Screen_Shot_2016_02_15_at_13_47_21.png)
+Idem a toda la parte de beneficios, simplemente en vez de utilizar "benefits" en la URL y demas lugares, se utiliza "events".
 
-### EVENT - LIKE
+## CALLS
 
-Idem a like de beneficio en destacado.
+![CALLS](http://s8.postimg.org/lw5dt7jat/Screen_Shot_2016_02_15_at_13_54_35.png)
 
-### Events
+### CALL - LIKE
 
-Idem a like de beneficio en destacado.
+Idem a like de convocatoria en destacado.
+
+### Calls
+
+#### Request
+
+```js
+GET /calls?populate[]=category&populate[]=company&where[zone]=56c102b7bee81dbe3cf09527
+Host: tj.dev.konabackend.com
+Content-Type: application/json
+Cache-Control: no-cache
+```
+
+#### Response
+
+```js
+[
+   {  
+      _id:"56c130b14db7206a69164687",
+      _createdAt:"2016-02-15T01:58:09.598Z",
+      _updatedAt:"2016-02-15T01:58:09.598Z",
+      picture:{  
+         url:"bucket/56c1300c4db7206a69164686",
+         width:400,
+         height:600
+      },
+      category:"56c10861bee81dbe3cf09534",
+      company:"56c11336cfe90f1f74f57595",
+      value:"15%",
+      title:"Todos los servicios",
+      description:"15% de descuento en todos los servicios (Alquiler de Vehículos - Autolavado - Gomería y Servicio Completo para autos y camionetas). En efectivo.",
+      date:"Todos los viernes",
+      expirationDate:"2016-03-14T00:00:00.000Z",
+      likes:0,
+      featured:true,
+      promotionType:"STANDARD",
+      type:"PRODUCT",
+      zone:"56c102b7bee81dbe3cf09527",
+      __v:0,
+      lifeStage:[  
+         "STUDY_AND_WORK"
+      ],
+      location:[  
+         -56.191665,
+         -34.912294
+      ],
+      accessibilities:[  
+         {  
+            name:"Rampa",
+            exists:false,
+            _id:"56c130b14db7206a6916468a"
+         },
+         {  
+            name:"Ascensor para ciegos",
+            exists:false,
+            _id:"56c130b14db7206a69164689"
+         },
+         {  
+            name:"Asesoramiento para sordos",
+            exists:false,
+            _id:"56c130b14db7206a69164688"
+         }
+      ]
+   },
+   ...
+]  
+```
+
+## CALLS - DETAILS
+
+![CALLS - DETAILS](http://s15.postimg.org/sw2oktoqz/Screen_Shot_2016_02_15_at_13_54_43.png)
+
+### Details
+
+#### Request
+
+```js
+GET /calls/5454353jl5k4j3
+Host: tj.dev.konabackend.com
+Content-Type: application/json
+Cache-Control: no-cache
+```
+
+#### Response
+
+```js
+{  
+  _id:"56c130b14db7206a69164687",
+  _createdAt:"2016-02-15T01:58:09.598Z",
+  _updatedAt:"2016-02-15T01:58:09.598Z",
+  picture:{  
+     url:"bucket/56c1300c4db7206a69164686",
+     width:400,
+     height:600
+  },
+  category:"56c10861bee81dbe3cf09534",
+  company:"56c11336cfe90f1f74f57595",
+  value:"15%",
+  title:"Todos los servicios",
+  description:"15% de descuento en todos los servicios (Alquiler de Vehículos - Autolavado - Gomería y Servicio Completo para autos y camionetas). En efectivo.",
+  date:"Todos los viernes",
+  expirationDate:"2016-03-14T00:00:00.000Z",
+  likes:0,
+  featured:true,
+  promotionType:"STANDARD",
+  type:"PRODUCT",
+  zone:"56c102b7bee81dbe3cf09527",
+  __v:0,
+  lifeStage:[  
+     "STUDY_AND_WORK"
+  ],
+  location:[  
+     -56.191665,
+     -34.912294
+  ],
+  accessibilities:[  
+     {  
+        name:"Rampa",
+        exists:false,
+        _id:"56c130b14db7206a6916468a"
+     },
+     {  
+        name:"Ascensor para ciegos",
+        exists:false,
+        _id:"56c130b14db7206a69164689"
+     },
+     {  
+        name:"Asesoramiento para sordos",
+        exists:false,
+        _id:"56c130b14db7206a69164688"
+     }
+  ]
+}
+```
+
+### CALL - LIKE
+
+Idem a like de convocatoria en destacado.
+
+### Canjear (Cash In)
+
+#### Request
+
+```js
+POST /calls/555lkjksadfu132/join
+Host: tj.dev.konabackend.com
+Content-Type: application/json
+Cache-Control: no-cache
+```
+
+#### Response
+
+Valid
+
+```js
+204 OK
+```
+
+Invalid
+
+```js
+400 INVALID FORMAT
+{message: "Ya te has inscripto a la convocatoria"}
+```
+
 
