@@ -954,7 +954,7 @@ Cache-Control: no-cache
 
 Idem a like de convocatoria en destacado.
 
-### Canjear (Cash In)
+### Inscribirte (Join)
 
 #### Request
 
