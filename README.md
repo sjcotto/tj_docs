@@ -153,7 +153,7 @@ Content-Type: application/json
 Cache-Control: no-cache
 
 { 
-    "email" : "santiago@konacloud.io", 
+    "ci" : "46932075", 
     "password" : "clear300"
 }
 
@@ -312,7 +312,7 @@ Cache-Control: no-cache
 
 #### Response
 
-Se retornan descuentos, eventos y convocatorias
+Se retornan descuentos (benefits), eventos (events) y convocatorias (calls).
 
 ```js
 [
@@ -367,9 +367,108 @@ Se retornan descuentos, eventos y convocatorias
 ]  
 ```
 
+### BENEFIT - LIKE
+
+#### Request
+
+```js
+POST /benefits/5klj234jlsd/like
+Host: tj.dev.konabackend.com
+Content-Type: application/json
+Cache-Control: no-cache
+```
+
+#### Response
+
+```js
+{  
+  _id:"56c130b14db7206a69164687",
+  _createdAt:"2016-02-15T01:58:09.598Z",
+  _updatedAt:"2016-02-15T01:58:09.598Z",
+  picture:{  
+     url:"bucket/56c1300c4db7206a69164686",
+     width:400,
+     height:600
+  },
+  category:"56c10861bee81dbe3cf09534",
+  company:"56c11336cfe90f1f74f57595",
+  value:"15%",
+  title:"Todos los servicios",
+  description:"15% de descuento en todos los servicios (Alquiler de Vehículos - Autolavado - Gomería y Servicio Completo para autos y camionetas). En efectivo.",
+  date:"Todos los viernes",
+  expirationDate:"2016-03-14T00:00:00.000Z",
+  likes:0,
+  featured:true,
+  promotionType:"STANDARD",
+  type:"PRODUCT",
+  zone:"56c102b7bee81dbe3cf09527",
+  __v:0,
+  lifeStage:[  
+     "STUDY_AND_WORK"
+  ],
+  location:[  
+     -56.191665,
+     -34.912294
+  ],
+  accessibilities:[  
+     {  
+        name:"Rampa",
+        exists:false,
+        _id:"56c130b14db7206a6916468a"
+     },
+     {  
+        name:"Ascensor para ciegos",
+        exists:false,
+        _id:"56c130b14db7206a69164689"
+     },
+     {  
+        name:"Asesoramiento para sordos",
+        exists:false,
+        _id:"56c130b14db7206a69164688"
+     }
+  ]
+}
+```
+
+### EVENT - LIKE
+
+#### Request
+
+```js
+POST /events/5klj234jlsd/like
+Host: tj.dev.konabackend.com
+Content-Type: application/json
+Cache-Control: no-cache
+```
+
+#### Response
+
+Idem a like para beneficio
+
+### CALL - LIKE
+
+#### Request
+
+```js
+POST /calls/5klj234jlsd/like
+Host: tj.dev.konabackend.com
+Content-Type: application/json
+Cache-Control: no-cache
+```
+
+#### Response
+
+Idem a like para beneficio
+
 ## BENEFITS
 
 ![BENEFITS](http://s11.postimg.org/4konebp0j/Screen_Shot_2016_02_15_at_12_34_06.png)
+
+### BENEFIT - LIKE
+
+Idem a like de beneficio en destacado.
+
+### Benefits
 
 #### Request
 
@@ -434,3 +533,287 @@ Cache-Control: no-cache
    ...
 ]  
 ```
+
+## BENEFITS - FILTERS
+
+![BENEFITS - FILTERS](http://s16.postimg.org/9wga33xz9/Screen_Shot_2016_02_15_at_13_22_59.png)
+
+### Categories
+
+#### Request
+
+```js
+GET /benefit-categories
+Host: tj.dev.konabackend.com
+Content-Type: application/json
+Cache-Control: no-cache
+```
+
+#### Response
+
+```js
+[
+  {
+    _id: "56c10863bee81dbe3cf09540",
+    name: "Salud",
+    color: "#e14d26",
+    icon: "bucket/56c10edccfe90f1f74f5758f"
+  },
+  {
+    _id: "56c10863bee81dbe3cf0953f",
+    name: "Gastronomía",
+    color: "#a667a0",
+    icon: "bucket/56c10c61cfe90f1f74f5758c"
+  },
+  ...
+]
+```
+
+## BENEFITS - MAP
+
+![BENEFITS - MAP](http://s10.postimg.org/53ca1lgh5/Screen_Shot_2016_02_15_at_13_06_02.png)
+
+### BENEFIT - LIKE
+
+Idem a like de beneficio en destacado.
+
+### Benefits Nearby
+
+#### Request
+
+- Se agrega un header X-LOCATION donde se envia la posicion actual del user.
+- Se cumplen los mismos filtros en la query.
+
+```js
+GET /benefits/nearby?populate[]=category&populate[]=company&where[zone]=56c102b7bee81dbe3cf09527&where[title][$options]=i&where[title][$regex]="Texto"&where[category][$in]=56c10861bee81dbe3cf09536&where[category][$in]=56c10861bee81dbe3cf01232&where[type]=SERVICE&where[lifeStage][$in]=TEENAGER&where[lifeStage][$in]=LIVING_ALONE
+Host: tj.dev.konabackend.com
+Content-Type: application/json
+Cache-Control: no-cache
+X-LOCATION: -56.4435, -34.2343
+```
+
+#### Response
+
+```js
+[
+   {  
+      _id:"56c130b14db7206a69164687",
+      _createdAt:"2016-02-15T01:58:09.598Z",
+      _updatedAt:"2016-02-15T01:58:09.598Z",
+      picture:{  
+         url:"bucket/56c1300c4db7206a69164686",
+         width:400,
+         height:600
+      },
+      category:"56c10861bee81dbe3cf09534",
+      company:"56c11336cfe90f1f74f57595",
+      value:"15%",
+      title:"Todos los servicios",
+      description:"15% de descuento en todos los servicios (Alquiler de Vehículos - Autolavado - Gomería y Servicio Completo para autos y camionetas). En efectivo.",
+      date:"Todos los viernes",
+      expirationDate:"2016-03-14T00:00:00.000Z",
+      likes:0,
+      featured:true,
+      promotionType:"STANDARD",
+      type:"PRODUCT",
+      zone:"56c102b7bee81dbe3cf09527",
+      __v:0,
+      lifeStage:[  
+         "STUDY_AND_WORK"
+      ],
+      location:[  
+         -56.191665,
+         -34.912294
+      ],
+      accessibilities:[  
+         {  
+            name:"Rampa",
+            exists:false,
+            _id:"56c130b14db7206a6916468a"
+         },
+         {  
+            name:"Ascensor para ciegos",
+            exists:false,
+            _id:"56c130b14db7206a69164689"
+         },
+         {  
+            name:"Asesoramiento para sordos",
+            exists:false,
+            _id:"56c130b14db7206a69164688"
+         }
+      ]
+   },
+   ...
+]  
+```
+
+## BENEFITS - SUGGEST
+
+![BENEFITS - SUGGEST](http://s27.postimg.org/uruisvmib/Screen_Shot_2016_02_15_at_13_17_21.png)
+
+### Categories
+
+Idem a servicio de categorias para benefiios anterior.
+
+### Suggest
+
+#### Request
+
+```js
+POST /benefits/suggest
+Host: tj.dev.konabackend.com
+Content-Type: application/json
+Cache-Control: no-cache
+
+{
+  "title": "Nuevo beneficios",
+  "description": "Descripcion",
+  "category": "5345kjdasf343wqerw"
+}
+```
+
+#### Response
+
+```js
+204 OK
+```
+
+## BENEFITS - DETAILS
+
+![BENEFITS - DETAILS](http://s14.postimg.org/sw4r68po1/Screen_Shot_2016_02_15_at_13_28_35.png)
+
+### Details
+
+#### Request
+
+```js
+GET /benefits/5454353jl5k4j3
+Host: tj.dev.konabackend.com
+Content-Type: application/json
+Cache-Control: no-cache
+```
+
+#### Response
+
+```js
+{  
+  _id:"56c130b14db7206a69164687",
+  _createdAt:"2016-02-15T01:58:09.598Z",
+  _updatedAt:"2016-02-15T01:58:09.598Z",
+  picture:{  
+     url:"bucket/56c1300c4db7206a69164686",
+     width:400,
+     height:600
+  },
+  category:"56c10861bee81dbe3cf09534",
+  company:"56c11336cfe90f1f74f57595",
+  value:"15%",
+  title:"Todos los servicios",
+  description:"15% de descuento en todos los servicios (Alquiler de Vehículos - Autolavado - Gomería y Servicio Completo para autos y camionetas). En efectivo.",
+  date:"Todos los viernes",
+  expirationDate:"2016-03-14T00:00:00.000Z",
+  likes:0,
+  featured:true,
+  promotionType:"STANDARD",
+  type:"PRODUCT",
+  zone:"56c102b7bee81dbe3cf09527",
+  __v:0,
+  lifeStage:[  
+     "STUDY_AND_WORK"
+  ],
+  location:[  
+     -56.191665,
+     -34.912294
+  ],
+  accessibilities:[  
+     {  
+        name:"Rampa",
+        exists:false,
+        _id:"56c130b14db7206a6916468a"
+     },
+     {  
+        name:"Ascensor para ciegos",
+        exists:false,
+        _id:"56c130b14db7206a69164689"
+     },
+     {  
+        name:"Asesoramiento para sordos",
+        exists:false,
+        _id:"56c130b14db7206a69164688"
+     }
+  ]
+}
+```
+
+### BENEFIT - LIKE
+
+Idem a like de beneficio en destacado.
+
+### Canjear (Cash In)
+
+#### Request
+
+```js
+POST /benefits/555lkjksadfu132/cash-in
+Host: tj.dev.konabackend.com
+Content-Type: application/json
+Cache-Control: no-cache
+```
+
+#### Response
+
+Valid
+
+```js
+204 OK
+```
+
+Invalid
+
+```js
+400 INVALID FORMAT
+{message: "Ya has canjeado el beneficio"}
+```
+
+## BENEFITS - DETAILS - RATING
+
+![BENEFITS - DETAILS - RATING](http://s13.postimg.org/swx6pwwzr/Screen_Shot_2016_02_15_at_13_44_25.png)
+
+### Rating
+
+```js
+POST /benefits/555lkjksadfu132/rate
+Host: tj.dev.konabackend.com
+Content-Type: application/json
+Cache-Control: no-cache
+
+{ rating: 2.7 }
+```
+
+#### Response
+
+Valid
+
+```js
+204 OK
+```
+
+Invalid
+
+```js
+400 INVALID FORMAT
+{message: "Ya has valorado el beneficio"}
+```
+
+## EVENTS
+
+![EVENTS](http://s28.postimg.org/scx6llkgd/Screen_Shot_2016_02_15_at_13_47_21.png)
+
+### EVENT - LIKE
+
+Idem a like de beneficio en destacado.
+
+### Events
+
+Idem a like de beneficio en destacado.
+
