@@ -104,6 +104,8 @@ GET benefits?populate[]=category&populate[]=company&offset=0&limit=10
 
 ### Register validation
 
+![Register Validation](http://s30.postimg.org/o58ibbh01/Screen_Shot_2016_02_15_at_12_08_30.png)
+
 #### Request
 
 ```js
