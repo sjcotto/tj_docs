@@ -277,7 +277,7 @@ Cache-Control: no-cache
   "email":"santiago@konacloud.io",
   "password":"****",
   "gender":"M",
-  "profilePictureUrl": "s3/56bfc9bae951a50468359d29",
+  "profilePictureUrl": "bucket/56bfc9bae951a50468359d29",
   "zone": "56bfc9c84b0c6fc1a7e2cc19",
   "description": "I'm beautiful",
   "lifeStages": ["TEENAGER"]
@@ -312,7 +312,7 @@ Cache-Control: no-cache
 
 #### Response
 
-Se retornan descuentos (benefits), eventos (events) y convocatorias (calls).
+Se retornan beneficios (benefits), eventos (events) y convocatorias (calls).
 
 ```js
 [
@@ -980,4 +980,223 @@ Invalid
 {message: "Ya te has inscripto a la convocatoria"}
 ```
 
+## NEARBY
 
+![NEARBY](http://s23.postimg.org/zd4hw80kb/Screen_Shot_2016_02_15_at_14_08_42.png)
+
+### Nearby
+
+#### Request
+
+- Simil a mapa de beneficio o evento
+- Se retornan eventos y beneficios cercanos al usuario.
+- Se agrega un header X-LOCATION donde se envia la posicion actual del user.
+
+```js
+GET /nearby
+Host: tj.dev.konabackend.com
+Content-Type: application/json
+Cache-Control: no-cache
+X-LOCATION: -56.4435, -34.2343
+```
+
+#### Response
+
+```js
+[
+   {  
+      _id:"56c130b14db7206a69164687",
+      _createdAt:"2016-02-15T01:58:09.598Z",
+      _updatedAt:"2016-02-15T01:58:09.598Z",
+      picture:{  
+         url:"bucket/56c1300c4db7206a69164686",
+         width:400,
+         height:600
+      },
+      category:"56c10861bee81dbe3cf09534",
+      company:"56c11336cfe90f1f74f57595",
+      value:"15%",
+      title:"Todos los servicios",
+      description:"15% de descuento en todos los servicios (Alquiler de Vehículos - Autolavado - Gomería y Servicio Completo para autos y camionetas). En efectivo.",
+      date:"Todos los viernes",
+      expirationDate:"2016-03-14T00:00:00.000Z",
+      likes:0,
+      featured:true,
+      promotionType:"STANDARD",
+      type:"PRODUCT",
+      zone:"56c102b7bee81dbe3cf09527",
+      __v:0,
+      lifeStage:[  
+         "STUDY_AND_WORK"
+      ],
+      location:[  
+         -56.191665,
+         -34.912294
+      ],
+      accessibilities:[  
+         {  
+            name:"Rampa",
+            exists:false,
+            _id:"56c130b14db7206a6916468a"
+         },
+         {  
+            name:"Ascensor para ciegos",
+            exists:false,
+            _id:"56c130b14db7206a69164689"
+         },
+         {  
+            name:"Asesoramiento para sordos",
+            exists:false,
+            _id:"56c130b14db7206a69164688"
+         }
+      ]
+   },
+   ...
+]  
+```
+
+## RIGHTS AND SERVICES
+
+![RIGHTS AND SERVICES](http://s22.postimg.org/s6zsgkyw1/Screen_Shot_2016_02_15_at_14_16_07.png)
+
+### Rights and services
+
+#### Request
+
+```js
+GET /rights-and-services
+Host: tj.dev.konabackend.com
+Content-Type: application/json
+Cache-Control: no-cache
+```
+
+#### Response
+
+```js
+[
+   {  
+      _id:"56c130b14db7206a69164687",
+      _createdAt:"2016-02-15T01:58:09.598Z",
+      _updatedAt:"2016-02-15T01:58:09.598Z",
+      title:"Todos los servicios",
+      description:"15% de descuento en todos los servicios (Alquiler de Vehículos - Autolavado - Gomería y Servicio Completo para autos y camionetas). En efectivo."
+    },
+   ...
+]  
+```
+
+## RIGHTS AND SERVICES - DETAILS
+
+![RIGHTS AND SERVICES - DETAILS](http://s21.postimg.org/58da2qjvb/Screen_Shot_2016_02_15_at_14_16_31.png)
+
+### Details
+
+#### Request
+
+```js
+GET /rights-and-services/5454353jl5k4j3
+Host: tj.dev.konabackend.com
+Content-Type: application/json
+Cache-Control: no-cache
+```
+
+#### Response
+
+```js
+{  
+  _id:"56c130b14db7206a69164687",
+  _createdAt:"2016-02-15T01:58:09.598Z",
+  _updatedAt:"2016-02-15T01:58:09.598Z",
+  title:"Todos los servicios",
+  description:"15% de descuento en todos los servicios (Alquiler de Vehículos - Autolavado - Gomería y Servicio Completo para autos y camionetas). En efectivo."
+}
+```
+
+## USER PROFILE
+
+![USER PROFILE](http://s15.postimg.org/40s2zocjv/Screen_Shot_2016_02_15_at_14_19_36.png)
+
+### Get user profile
+
+#### Request
+
+```js
+GET /users/5454353jl5k4j3
+Host: tj.dev.konabackend.com
+Content-Type: application/json
+Cache-Control: no-cache
+```
+
+#### Response
+
+```js
+{  
+  _id:"56c130b14db7206a69164687",
+  _createdAt:"2016-02-15T01:58:09.598Z",
+  _updatedAt:"2016-02-15T01:58:09.598Z",
+  firstName:"Gonzalo",
+  lastName:"Gonzalo",
+  ...
+}
+```
+
+### Upload profile Picture
+
+Idem a parte de registro.
+
+### Get zones list
+
+Idem a parte de registro.
+
+### Update profile
+
+```js
+Life stages
+
+-TEENAGER
+-LIVING_ALONE
+-STUDY_AND_WORK
+```
+
+#### Request
+
+```js
+PUT /users HTTP/1.1
+Host: tj.dev.konabackend.com
+Content-Type: application/json
+Cache-Control: no-cache
+
+{  
+  "firstName":"Santiago",
+  "lastName":"Cotto",
+  "ci": "46932075",
+  "birthday":"1989-06-20",
+  "phone": "091271974",
+  "email":"santiago@konacloud.io",
+  "password":"****",
+  "gender":"M",
+  "profilePictureUrl": "bucket/56bfc9bae951a50468359d29",
+  "zone": "56bfc9c84b0c6fc1a7e2cc19",
+  "description": "I'm beautiful",
+  "lifeStages": ["TEENAGER"]
+}
+```
+
+#### Response
+
+```js
+{  
+  "firstName":"Santiago",
+  "lastName":"Cotto",
+  "ci": "46932075",
+  "birthday":"1989-06-20",
+  "phone": "091271974",
+  "email":"santiago@konacloud.io",
+  "password":"****",
+  "gender":"M",
+  "profilePictureUrl": "bucket/56bfc9bae951a50468359d29",
+  "zone": "56bfc9c84b0c6fc1a7e2cc19",
+  "description": "I'm beautiful",
+  "lifeStages": ["TEENAGER"]
+}
+```
