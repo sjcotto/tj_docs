@@ -430,6 +430,18 @@ Cache-Control: no-cache
 }
 ```
 
+### BENEFIT - DIS-LIKE
+
+#### Request
+
+```js
+DELETE /benefits/5klj234jlsd/like
+Host: tj.dev.konabackend.com
+Content-Type: application/json
+Cache-Control: no-cache
+```
+
+
 ### EVENT - LIKE
 
 #### Request
@@ -444,6 +456,17 @@ Cache-Control: no-cache
 #### Response
 
 Idem a like para beneficio
+
+### EVENT - DIS-LIKE
+
+#### Request
+
+```js
+DELETE /events/5klj234jlsd/like
+Host: tj.dev.konabackend.com
+Content-Type: application/json
+Cache-Control: no-cache
+```
 
 ### CALL - LIKE
 
@@ -824,11 +847,7 @@ Valid
 204 OK
 ```
 
-Invalid
-
-```js
-400 INVALID FORMAT
-{message: "Ya has valorado el beneficio"}
+Idempotent method*
 ```
 
 ## EVENTS
